@@ -1431,7 +1431,7 @@
                 <th>DEST</th>
                 <th>INPUT TIME</th>
                 <th>OUTPUT TIME</th>
-                <th>INSPECTION TIME (GIÂY)</th>
+                <th>INSPECTION TIME (MINUTE)</th>
                 <th>Total defective qty</th>
                 <th>Contamination</th>
                 <th>Bond Gap</th>
@@ -1535,9 +1535,9 @@
             </div>
           </div>
 
-          <!-- Chart 3: AVERAGE OF INSPECTION TIME BY FCT (GIÂY) -->
+          <!-- Chart 3: AVERAGE OF INSPECTION TIME BY FCT (MINUTE) -->
           <div class="chart-panel-card">
-            <div class="chart-panel-header">AVERAGE OF INSPECTION TIME BY FCT (GIÂY)</div>
+            <div class="chart-panel-header">AVERAGE OF INSPECTION TIME BY FCT (MINUTE)</div>
             <div class="chart-canvas-wrapper">
               <canvas id="chartAvgInspectionTime"></canvas>
             </div>
@@ -2248,18 +2248,29 @@
         const inTime = record.inputTime || timeStr;
         const outTime = isScanIn ? '' : (record.outputTime || (record.scanType === 'OUT' ? timeStr : ''));
 
-        // Tính thời gian kiểm tra (số giây giữa IN và OUT) theo yêu cầu
-        let inspectSec = '';
+        // Tính thời gian kiểm tra quy đổi ra phút (MINUTE) giữa IN và OUT
+        let inspectMinutes = '';
         if (!isScanIn) {
-          if (record.inspectionSeconds !== undefined && record.inspectionSeconds !== null && record.inspectionSeconds !== '') {
-            inspectSec = String(record.inspectionSeconds);
+          if (record.inspectionMinutes !== undefined && record.inspectionMinutes !== null && record.inspectionMinutes !== '') {
+            inspectMinutes = String(record.inspectionMinutes);
+          } else if (record.inspectionSeconds !== undefined && record.inspectionSeconds !== null && record.inspectionSeconds !== '') {
+            const sec = Number(record.inspectionSeconds);
+            const m = parseFloat((sec / 60).toFixed(1));
+            inspectMinutes = String(m > 0 ? m : 1);
           } else if (inTime && outTime && inTime !== outTime) {
-            const diff = calculateSecondsBetween(inTime, outTime);
-            inspectSec = diff > 0 ? String(diff) : '15';
+            const diffSec = calculateSecondsBetween(inTime, outTime);
+            if (diffSec > 0) {
+              const m = parseFloat((diffSec / 60).toFixed(1));
+              inspectMinutes = String(m > 0 ? m : 1);
+            } else {
+              inspectMinutes = '1';
+            }
           } else if (record['INSPECTION TIME (MINUTES)']) {
-            inspectSec = String(record['INSPECTION TIME (MINUTES)']);
+            let mVal = parseFloat(record['INSPECTION TIME (MINUTES)'] || 0) || 0;
+            if (mVal > 60) mVal = parseFloat((mVal / 60).toFixed(1));
+            inspectMinutes = String(mVal > 0 ? mVal : 1);
           } else {
-            inspectSec = '15';
+            inspectMinutes = '1';
           }
         }
 
@@ -2284,7 +2295,7 @@
           'COUNTRY': record.country || 'USA',
           'INPUT TIME': inTime,
           'OUTPUT TIME': outTime,
-          'INSPECTION TIME (MINUTES)': inspectSec,
+          'INSPECTION TIME (MINUTES)': inspectMinutes,
           'scanType': record.scanType || (isScanIn ? 'IN' : 'OUT'),
           'status': record.status || (isScanIn ? 'IN' : 'OUT'),
           'Total defective qty': isDefective ? '1' : '0',
@@ -2888,15 +2899,18 @@
         const todayStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
         const timeWithSec = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 
-        // Tính chính xác thời gian kiểm tra mất bao nhiêu giây giữa IN và OUT
+        // Tính chính xác thời gian kiểm tra quy đổi ra phút (MINUTE) giữa IN và OUT
         let diffSeconds = 0;
+        let diffMinutes = 0;
         if (isScanOut) {
           if (currentScanSession.inputTimestamp) {
             diffSeconds = Math.max(1, Math.round((now.getTime() - new Date(currentScanSession.inputTimestamp).getTime()) / 1000));
           } else if (currentScanSession.inputTime) {
             diffSeconds = calculateSecondsBetween(currentScanSession.inputTime, timeWithSec);
           }
-          if (!diffSeconds || diffSeconds <= 0) diffSeconds = 15;
+          if (!diffSeconds || diffSeconds <= 0) diffSeconds = 60;
+          diffMinutes = parseFloat((diffSeconds / 60).toFixed(1));
+          if (diffMinutes <= 0) diffMinutes = 0.5;
         }
 
         const recId = currentScanSession.inRecordId || ('SCAN_' + Date.now());
@@ -2930,6 +2944,8 @@
           outputTime: isScanOut ? timeWithSec : '',
           outputTimestamp: isScanOut ? now.toISOString() : '',
           inspectionSeconds: isScanOut ? diffSeconds : '',
+          inspectionMinutes: isScanOut ? diffMinutes : '',
+          'INSPECTION TIME (MINUTES)': isScanOut ? String(diffMinutes) : '',
           saveTime: timeWithSec,
           date: todayStr,
           timestamp: now.toISOString(),
@@ -2970,8 +2986,8 @@
           renderAllCharts();
 
           if (isScanOut) {
-            updateStatusBanner(`SCAN-OUT SAVE SUCCESSFUL! HOÀN THÀNH KIỂM TRA UCC [${record.ucc}] TRONG ${diffSeconds} GIÂY!`);
-            showToast(`Đã lưu SCAN OUT thành công cho UCC ${record.ucc} (${diffSeconds}s)!`, "✅");
+            updateStatusBanner(`SCAN-OUT SAVE SUCCESSFUL! HOÀN THÀNH KIỂM TRA UCC [${record.ucc}] TRONG ${diffMinutes} PHÚT!`);
+            showToast(`Đã lưu SCAN OUT thành công cho UCC ${record.ucc} (${diffMinutes} phút)!`, "✅");
           } else {
             updateStatusBanner(`SCAN-IN SAVE SUCCESSFUL! ĐÃ LƯU STATUS IN CHO UCC [${record.ucc}] VÀO BÁO CÁO!`);
             showToast(`Đã lưu SCAN IN cho UCC ${record.ucc} vào báo cáo!`, "✅");
@@ -3313,7 +3329,11 @@
       filtered.forEach((r, idx) => {
         const qty = parseInt(r['3iZ QTY'] || r['QTY'] || 0) || 0;
         const carton = parseInt(r['CARTON QTY'] || r['CARTON'] || 1) || 1;
-        const time = parseFloat(r['INSPECTION TIME (MINUTES)'] || 0) || 0;
+        let time = parseFloat(r['INSPECTION TIME (MINUTES)'] || 0) || 0;
+        // Nếu là dữ liệu cũ lưu bằng giây (> 60), quy đổi về phút
+        if (time > 60) {
+          time = parseFloat((time / 60).toFixed(1));
+        }
         const def = parseInt(r['Total defective qty'] || 0) || 0;
         const isCompleted = Boolean(r['OUTPUT TIME'] && String(r['OUTPUT TIME']).trim());
 
@@ -3353,7 +3373,7 @@
       <td style="text-align:left;">${r['DEST'] || ''}</td>
       <td style="font-family:monospace; font-weight:600; color:#15803d;">${r['INPUT TIME'] || ''}</td>
       <td>${isCompleted ? `<span style="font-family:monospace; font-weight:600; color:#b91c1c;">${r['OUTPUT TIME']}</span>` : `<span style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:700; background:#fef3c7; color:#b45309; border:1px solid #fde68a;">⏳ Chờ Scan Out...</span>`}</td>
-      <td style="font-weight:700; font-family:monospace; color:${isCompleted ? '#0284c7' : '#94a3b8'}">${isCompleted ? `${time}s` : '---'}</td>
+      <td style="font-weight:700; font-family:monospace; color:${isCompleted ? '#0284c7' : '#94a3b8'}">${isCompleted ? `${time}` : '---'}</td>
       <td style="font-weight:bold; color:${def > 0 ? '#dc2626' : '#15803d'}">${def}</td>
       <td>${r['Contamination'] || 0}</td>
       <td>${r['Bond Gap'] || 0}</td>
@@ -3373,7 +3393,7 @@
       // Update Totals row in footer
       document.getElementById('tot-qty').textContent = totQty.toLocaleString();
       document.getElementById('tot-carton').textContent = totCarton.toLocaleString();
-      document.getElementById('avg-time').textContent = completedInspectionCount > 0 ? `${(totTime / completedInspectionCount).toFixed(1)}s` : '0s';
+      document.getElementById('avg-time').textContent = completedInspectionCount > 0 ? (totTime / completedInspectionCount).toFixed(1) : '0.0';
       document.getElementById('tot-def').textContent = totDefect.toLocaleString();
 
       document.getElementById('tot-e001').textContent = defectCounts.e001;
@@ -3686,7 +3706,7 @@
       });
     }
 
-    // 3. AVERAGE OF INSPECTION TIME BY FCT (GIÂY - converted from Plant)
+    // 3. AVERAGE OF INSPECTION TIME BY FCT (MINUTE - converted from Plant)
     function renderChartAvgInspectionTimeByFct(data) {
       const ctx = document.getElementById('chartAvgInspectionTime')?.getContext('2d');
       if (!ctx) return;
@@ -3694,7 +3714,8 @@
       const fctTimes = {};
       data.forEach(r => {
         const isCompleted = Boolean(r['OUTPUT TIME'] && String(r['OUTPUT TIME']).trim());
-        const time = parseFloat(r['INSPECTION TIME (MINUTES)'] || 0) || 0;
+        let time = parseFloat(r['INSPECTION TIME (MINUTES)'] || 0) || 0;
+        if (time > 60) time = parseFloat((time / 60).toFixed(1));
         if (isCompleted && time > 0) {
           const fct = getRecordFct(r);
           if (!fctTimes[fct]) fctTimes[fct] = { sum: 0, count: 0 };
@@ -3717,7 +3738,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'Thời gian TB (Giây)',
+            label: 'Thời gian TB (Phút)',
             data: values,
             backgroundColor: '#0ea5e9',
             borderWidth: 1,
@@ -3731,7 +3752,7 @@
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: (c) => ` Thời gian TB: ${c.parsed.y} giây`
+                label: (c) => ` Thời gian TB: ${c.parsed.y} phút`
               }
             }
           },
