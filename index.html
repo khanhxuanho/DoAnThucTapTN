@@ -1297,9 +1297,8 @@
               <span style="font-size:13px; font-weight:800; color:#0f172a; letter-spacing:0.5px;">
                 ⚡ BẢNG CHỌN NHANH MÃ LỖI (BẮN MÃ VẠCH HOẶC CLICK TRỰC TIẾP):
               </span>
-              <button href="" onclick="switchTab('defects')" target=" _blank"
-                style="font-size:12px; color:#0284c7; font-weight:700; text-decoration:none;">↗ Mở Bảng Mã Vạch A4 để
-                In</button>
+              <button type="button" onclick="switchTab('defects')"
+                style="font-size:12px; color:#0284c7; font-weight:700; text-decoration:none; background:none; border:none; cursor:pointer; padding:0;">↗ Mở Bảng Mã Vạch A4 để In</button>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:8px;" id="quickDefectsPalette">
               <button type="button" class="defect-pill-btn pass" onclick="processScanInput('E000')">✅ E000 - Không Lỗi
@@ -2513,7 +2512,9 @@
       // 3. Scan Records (cả lượt quét IN và OUT)
       allScanRecords = await FirebaseService.getScanRecords();
 
-      // Khôi phục danh sách quét trong ngày vào bảng Input List
+      // Khôi phục danh sách quét trong ngày vào bảng Input List:
+      // Yêu cầu: Khi load lại trang, xóa/lọc bỏ các dòng Scan OUT, chỉ giữ lại các dòng mới Scan IN (chưa Scan OUT).
+      // Các dòng Scan OUT chỉ xuất hiện sau khi vừa scan out xong trong phiên làm việc.
       const now = new Date();
       const pad = n => String(n).padStart(2, '0');
       const todayStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
@@ -2521,7 +2522,17 @@
       inputListRecords = allScanRecords.filter(s => {
         if (!s || !s.ucc) return false;
         const sDate = String(s.date || '').replace(/[^0-9]/g, '').slice(0, 8);
-        return sDate === todayStr;
+        if (sDate !== todayStr) return false;
+
+        // Bỏ qua các dòng đã OUT
+        const isOut = s.scanType === 'OUT' || s.status === 'OUT' || (s.defCode && s.defCode !== 'IN' && s.outputTime);
+        if (isOut) return false;
+
+        // Bỏ qua nếu UCC này đã hoàn thành scan OUT trong ngày
+        const daily = getUccDailyStatus(s.ucc);
+        if (daily.status === 'OUT') return false;
+
+        return s.scanType === 'IN' || s.defCode === 'IN' || s.status === 'IN';
       });
 
       renderInputListTable();
@@ -2649,34 +2660,38 @@
         return cleaned === cleanTarget;
       };
 
-      // 1. Check if UCC has already completed OUT today
+      // 1. Kiểm tra nếu UCC này đã thực sự hoàn thành Scan OUT hôm nay
+      // Điều kiện hoàn thành OUT: s.scanType === 'OUT' hoặc s.status === 'OUT' và có outputTime không rỗng
       for (const s of allScanRecords) {
         if (s && isMatchUcc(s.ucc || s.UCC_LABEL) && isToday(s.date || s.DATE || s.timestamp)) {
-          if (s.scanType === 'OUT' || s.status === 'OUT' || (s.defCode && s.defCode !== 'IN' && s.outputTime)) {
+          const isExplicitOut = (s.scanType === 'OUT' || s.status === 'OUT') && Boolean(s.outputTime && String(s.outputTime).trim());
+          if (isExplicitOut) {
             return { status: 'OUT', record: s };
           }
         }
       }
 
-      // Also check reportData (any record for today with an OUTPUT TIME or defCode not IN is completed OUT)
-      const repMatch = reportData.find(r => {
+      // Kiểm tra trong reportData: CHỈ coi là OUT khi có 'OUTPUT TIME' không rỗng VÀ scanType !== 'IN'
+      const repOutMatch = reportData.find(r => {
         if (!r) return false;
         const rUcc = r['UCC'] || r['UCC_LABEL'] || r.ucc;
         if (isMatchUcc(rUcc) && isToday(r['DATE'] || r.date)) {
-          if (r['OUTPUT TIME'] || r.scanType === 'OUT' || r.status === 'OUT' || (r['Total defective qty'] && r['Total defective qty'] !== '0')) {
+          const hasOutputTime = Boolean(r['OUTPUT TIME'] && String(r['OUTPUT TIME']).trim());
+          const isExplicitOut = r.scanType === 'OUT' || r.status === 'OUT';
+          if (isExplicitOut || (hasOutputTime && r.scanType !== 'IN')) {
             return true;
           }
         }
         return false;
       });
-      if (repMatch) {
-        return { status: 'OUT', record: repMatch };
+      if (repOutMatch) {
+        return { status: 'OUT', record: repOutMatch };
       }
 
-      // 2. Check if UCC has already been scanned IN today (waiting for OUT)
+      // 2. Kiểm tra nếu UCC này đã có lượt quét IN hôm nay (đang chờ quét OUT lần 2)
       for (const s of allScanRecords) {
         if (s && isMatchUcc(s.ucc || s.UCC_LABEL) && isToday(s.date || s.DATE || s.timestamp)) {
-          if (s.scanType === 'IN' || s.status === 'IN' || s.defCode === 'IN') {
+          if (s.scanType === 'IN' || s.status === 'IN' || s.defCode === 'IN' || !s.outputTime) {
             return { status: 'IN', record: s };
           }
         }
@@ -2685,14 +2700,14 @@
       const repInMatch = reportData.find(r => {
         if (!r) return false;
         const rUcc = r['UCC'] || r['UCC_LABEL'] || r.ucc;
-        return isMatchUcc(rUcc) && isToday(r['DATE'] || r.date) && (!r['OUTPUT TIME'] || r.scanType === 'IN' || r.status === 'IN');
+        return isMatchUcc(rUcc) && isToday(r['DATE'] || r.date);
       });
       if (repInMatch) {
         return { status: 'IN', record: repInMatch };
       }
 
-      // 3. Not scanned yet today
-      return { status: 'NONE' };
+      // 3. Chưa từng quét hôm nay
+      return { status: 'NONE', record: null };
     }
 
     // Step 1: Scan UCC
