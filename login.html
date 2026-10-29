@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng nhập Hệ thống Kiểm tra Chất lượng 3IZ</title>
+  <title>DU LIEU MAU_ CHUAN - Master UCC Data</title>
   <style>
 /* Enterprise MES / Factory Quality Inspection System Styles */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
@@ -1111,115 +1111,111 @@ body {
 }
 
 </style>
-  <style>
-    body {
-      background: radial-gradient(circle at 50% 30%, #005f69, #00282d);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-    }
-    .login-container {
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.4);
-      width: 420px;
-      overflow: hidden;
-      border: 1px solid #cbd5e1;
-    }
-    .login-hero {
-      background: #00454d;
-      color: #fff;
-      padding: 24px;
-      text-align: center;
-      border-bottom: 3px solid #00a4b4;
-    }
-    .login-hero h1 {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-    .login-hero p {
-      font-size: 12px;
-      color: #94a3b8;
-    }
-    .login-body {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .preset-users {
-      display: flex;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .preset-btn {
-      flex: 1;
-      padding: 6px;
-      font-size: 11px;
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      color: #334155;
-    }
-    .preset-btn:hover {
-      background: #e2e8f0;
-      border-color: #94a3b8;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-
-  <div class="login-container">
-    <div class="login-hero">
-      <div style="font-size: 32px; margin-bottom: 6px;">🏭 👟</div>
-      <h1>HỆ THỐNG KIỂM TRA CHẤT LƯỢNG 3IZ</h1>
-      <p>Quality Inspection & Barcode Scan Terminal (TK_VT 3.0)</p>
-    </div>
-
-    <form class="login-body" onsubmit="event.preventDefault(); submitLogin();">
-      <div class="form-group">
-        <label for="inpUserId">User ID (Mã người đăng nhập)</label>
-        <input type="text" id="inpUserId" value="22194805" required placeholder="Nhập ID (Ví dụ: 22194805)">
+  <div class="app-container">
+    
+    <!-- Top System Window Bar -->
+    <header class="top-window-bar">
+      <div class="window-title">
+        <span>🏭 <strong>3iZ QUALITY INSPECTION TERMINAL</strong></span>
+        <span class="app-version-badge">TK_VT 3.0</span>
       </div>
-
-      <div class="form-group">
-        <label for="inpPassword">Mật khẩu</label>
-        <input type="password" id="inpPassword" value="123456" required placeholder="Mật khẩu đăng nhập">
+      
+      <div class="window-actions">
+        <span id="firebaseStatusBadge" class="badge-online">● Firebase Online</span>
+        <a href="login.html" style="color:#cbd5e1; text-decoration:none; font-size:12px;">👤 <span id="currentUserDisplay">22194805</span></a>
+        <a href="index.html" style="color:#cbd5e1; text-decoration:none; font-size:12px;" title="Cổng Tổng Hợp Portal">🏠</a>
+        <button type="button">_</button>
+        <button type="button">▢</button>
+        <button type="button">✕</button>
       </div>
+    </header>
 
-      <div class="form-group">
-        <label for="inpFct">FCT (Đổi từ PLANT, mặc định VT1)</label>
-        <select id="inpFct">
-          <option value="VT1" selected>VT1 (Mặc định xưởng VT1)</option>
-          <option value="VT2">VT2 (Xưởng VT2)</option>
-          <option value="VT3">VT3 (Xưởng VT3)</option>
-          <option value="VT4">VT4 (Xưởng VT4)</option>
-        </select>
+    <!-- Sub Navigation -->
+    <nav class="system-subnav">
+      <div class="nav-links">
+        <a href="scan.html" class="nav-item-btn">🔍 3IZ SCAN</a>
+        <a href="report.html" class="nav-item-btn">📊 3IZ REPORT</a>
+        <a href="chart.html" class="nav-item-btn">📈 3IZ Analysis</a>
+        <a href="master_data.html" class="nav-item-btn active">📁 Master Data</a>
+        <a href="defects.html" class="nav-item-btn">🏷️ 11 Lỗi (Barcodes)</a>
       </div>
+      <div class="system-status-indicator">
+        <span class="live-clock" id="navClock">2026-10-27 21:00:00</span>
+      </div>
+    </nav>
 
-      <div style="font-size:11px; color:#64748b;">
-        <span>Tài khoản mẫu:</span>
-        <div class="preset-users">
-          <button type="button" class="preset-btn" onclick="fillUser('22194805', 'HO XUAN KHANH', 'VT1')">HO XUAN KHANH (22194805)</button>
-          <button type="button" class="preset-btn" onclick="fillUser('admin', 'Admin', 'VT1')">Admin VT1</button>
+    <!-- Main Viewport -->
+    <main class="main-viewport" style="background:#fff; display:flex; flex-direction:column; flex:1;">
+      
+      <div class="report-toolbar">
+        <div class="filter-group">
+          <label for="searchMasterQuery">Tìm kiếm Master Data</label>
+          <input type="text" id="searchMasterQuery" placeholder="UCC, Style, Model, Country, POID..." oninput="filterMasterData()" style="width:260px;">
         </div>
+
+        <div class="filter-group">
+          <label for="filterMasterCountry">Quốc gia (Country)</label>
+          <select id="filterMasterCountry" onchange="filterMasterData()">
+            <option value="">Tất cả quốc gia</option>
+            <option value="USA">USA</option>
+            <option value="JAPAN">JAPAN</option>
+            <option value="KOREA">KOREA</option>
+            <option value="CHINA">CHINA</option>
+          </select>
+        </div>
+
+        <span style="margin-left:auto; font-weight:bold; color:#005f69;" id="masterDataCountDisplay">Tổng số: 153 bản ghi</span>
       </div>
 
-      <button type="submit" class="btn-primary" style="padding: 12px; font-size: 14px; margin-top: 6px;">
-        ĐĂNG NHẬP VÀ VÀO HỆ THỐNG SCAN
-      </button>
-
-      <div style="display:flex; justify-content:space-between; font-size:12px; color:#0284c7; margin-top:4px;">
-        <a href="index.html" style="text-decoration:none; color:inherit;">← Vào thẳng Cổng Portal</a>
-        <span style="color:#16a34a; font-weight:bold;">● Firebase RTDB Connected</span>
+      <div class="report-table-container">
+        <table class="report-table" id="masterDataTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>UCC_LABEL</th>
+              <th>STYLE NO</th>
+              <th>POID</th>
+              <th>SIZE</th>
+              <th>UPC_LABEL</th>
+              <th>MODEL</th>
+              <th>MSR</th>
+              <th>INV</th>
+              <th>QTY</th>
+              <th>CARTON</th>
+              <th>COUNTRY</th>
+              <th>THAO TÁC</th>
+            </tr>
+          </thead>
+          <tbody id="masterDataTableBody">
+            <!-- Dynamically populated from DU LIEU MAU_ CHUAN.txt -->
+          </tbody>
+        </table>
       </div>
-    </form>
+
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <footer class="app-status-bar">
+      <div class="status-left">
+        <span class="status-msg-banner" id="statusMessageBanner">MASTER DATA READY</span>
+        <span class="status-sys-text" id="statusSysDetail">[DU LIEU MAU_ CHUAN.txt]</span>
+      </div>
+      <div class="status-right">
+        <span>🗄️ [Service : TK_VT 3.0]</span>
+        <span id="statusBarUserName">HO XUAN KHANH</span>
+        <span>| ENG</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-msg" id="globalToast">
+    <span id="toastIcon">🔔</span>
+    <span id="toastText">Thông báo</span>
   </div>
 
   <script>
@@ -1299,6 +1295,85 @@ window.DEFECT_CODES = [
     "field": "None Defect"
   }
 ];
+
+</script>
+  <script>
+/**
+ * Web Audio API Sound Effects for Industrial Barcode Scanning
+ */
+const SoundService = {
+  ctx: null,
+  muted: false,
+
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
+      }
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  },
+
+  playTone(freq, type, duration, delay = 0, vol = 0.15) {
+    if (this.muted) return;
+    try {
+      this.init();
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + delay);
+      
+      gain.gain.setValueAtTime(vol, this.ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + delay + duration);
+      
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      
+      osc.start(this.ctx.currentTime + delay);
+      osc.stop(this.ctx.currentTime + delay + duration);
+    } catch (e) {
+      console.warn("Audio playback error:", e);
+    }
+  },
+
+  // 1. UCC scan beep (standard crisp barcode reader beep)
+  beepScan() {
+    this.playTone(1760, 'sine', 0.08, 0, 0.12);
+  },
+
+  // 2. Defect entered beep
+  beepDefect() {
+    this.playTone(1320, 'triangle', 0.07, 0, 0.15);
+    this.playTone(1760, 'triangle', 0.07, 0.08, 0.15);
+  },
+
+  // 3. Save Success chime (ZYYY scanned)
+  playSuccess() {
+    this.playTone(523.25, 'sine', 0.12, 0, 0.15);      // C5
+    this.playTone(659.25, 'sine', 0.12, 0.08, 0.15);   // E5
+    this.playTone(783.99, 'sine', 0.14, 0.16, 0.18);   // G5
+    this.playTone(1046.50, 'sine', 0.25, 0.24, 0.2);   // C6
+  },
+
+  // 4. Error buzzer
+  playError() {
+    this.playTone(220, 'sawtooth', 0.22, 0, 0.2);
+    this.playTone(165, 'sawtooth', 0.25, 0.12, 0.2);
+  },
+
+  // 5. Clear / Reset (ZZZZ)
+  playClear() {
+    this.playTone(880, 'sine', 0.08, 0, 0.12);
+    this.playTone(440, 'sine', 0.14, 0.08, 0.12);
+  }
+};
+
+window.SoundService = SoundService;
 
 </script>
   <script>
@@ -1713,21 +1788,1421 @@ window.FirebaseService = FirebaseService;
 
 </script>
   <script>
-    function fillUser(id, name, fct) {
-      document.getElementById('inpUserId').value = id;
-      document.getElementById('inpFct').value = fct;
-    }
+/**
+ * Main Application Logic for Quality Inspection System
+ */
 
-    async function submitLogin() {
-      const id = document.getElementById('inpUserId').value.trim();
-      const pass = document.getElementById('inpPassword').value.trim();
-      const fct = document.getElementById('inpFct').value;
+// Global State
+let masterList = [];
+let masterMap = {};
+let reportData = [];
+let defectList = [];
+let currentScanSession = {
+  ucc: null,
+  masterItem: null,
+  defCode: null,
+  defName: null,
+  inputTime: null
+};
+let inputListRecords = [];
+let charts = {};
 
-      const res = await FirebaseService.login(id, pass, fct);
-      if (res.success) {
-        window.location.href = 'index.html';
+// Current logged in user
+let currentUser = FirebaseService.getCurrentUser();
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', async () => {
+  initClock();
+  initUser();
+  initReportDates(true);
+  initChartDates(true);
+  initEventListeners();
+  await loadData();
+  renderDefectBarcodesSheet();
+  renderReportTable();
+  renderMasterDataTable();
+  renderAllCharts();
+  initConnectionMonitor();
+  focusScanInput();
+});
+
+// Real-time Clock
+function initClock() {
+  function updateTime() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const str = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+    const el1 = document.getElementById('navClock');
+    const el2 = document.getElementById('scanClock');
+    if (el1) el1.textContent = str;
+    if (el2) el2.textContent = str;
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+}
+
+// User Initialization
+function initUser() {
+  currentUser = FirebaseService.getCurrentUser();
+  const nameDisp = document.getElementById('statusBarUserName');
+  const userDisp = document.getElementById('currentUserDisplay');
+  const idDisp = document.getElementById('disp-userId');
+  const fctSelect = document.getElementById('fctSelect');
+
+  if (nameDisp) nameDisp.textContent = currentUser.name || 'HO XUAN KHANH';
+  if (userDisp) userDisp.textContent = currentUser.id || '22194805';
+  if (idDisp) idDisp.textContent = currentUser.id || '22194805';
+  if (fctSelect && currentUser.fct) fctSelect.value = currentUser.fct;
+}
+
+// Initialize Report Date Filters (To = Today, From = Yesterday)
+function initReportDates(force = false) {
+  const dateFromInput = document.getElementById('filterReportDateFrom');
+  const dateToInput = document.getElementById('filterReportDateTo');
+  if (!dateFromInput && !dateToInput) return;
+
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  const pad = n => String(n).padStart(2, '0');
+  const toStr = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+  const fromStr = `${yesterday.getFullYear()}-${pad(yesterday.getMonth() + 1)}-${pad(yesterday.getDate())}`;
+
+  if (dateToInput && (force || !dateToInput.value)) dateToInput.value = toStr;
+  if (dateFromInput && (force || !dateFromInput.value)) dateFromInput.value = fromStr;
+}
+
+// Initialize Analysis/Chart Date Filters (To = Today, From = Yesterday)
+function initChartDates(force = false) {
+  const dateFromInput = document.getElementById('chartDateFrom');
+  const dateToInput = document.getElementById('chartDateTo');
+  if (!dateFromInput && !dateToInput) return;
+
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  const pad = n => String(n).padStart(2, '0');
+  const toStr = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+  const fromStr = `${yesterday.getFullYear()}-${pad(yesterday.getMonth() + 1)}-${pad(yesterday.getDate())}`;
+
+  if (dateToInput && (force || !dateToInput.value)) dateToInput.value = toStr;
+  if (dateFromInput && (force || !dateFromInput.value)) dateFromInput.value = fromStr;
+}
+
+// Event Listeners
+function initEventListeners() {
+  const scanInput = document.getElementById('mainScanInput');
+  if (scanInput) {
+    scanInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        processScanInput(scanInput.value.trim());
+      }
+    });
+  }
+
+  // Auto focus scan input when clicking in scan tab
+  const scanPane = document.getElementById('pane-scan');
+  if (scanPane) {
+    scanPane.addEventListener('click', (e) => {
+      if (!e.target.closest('button') && !e.target.closest('select')) {
+        focusScanInput();
+      }
+    });
+  }
+}
+
+function focusScanInput() {
+  const inp = document.getElementById('mainScanInput');
+  if (inp) inp.focus();
+}
+
+// Load Master Data & Reports
+async function loadData() {
+  showToast("Đang kết nối Firebase và nạp dữ liệu...", "⏳");
+
+  // 1. Defect codes
+  defectList = await FirebaseService.getDefectCodes();
+
+  // 2. Master Data
+  const masterRes = await FirebaseService.getMasterData();
+  masterList = masterRes.list;
+  masterMap = masterRes.map;
+
+  // 3. Report Data
+  reportData = await FirebaseService.getReportData();
+
+  if (reportData.length > 0) {
+    showToast(`Đã nạp ${masterList.length} mã UCC và ${reportData.length} bản ghi kiểm tra!`, "✅");
+  } else {
+    showToast(`Đã nạp ${masterList.length} mã Master Data. Sẵn sàng quét hàng!`, "✅");
+  }
+}
+
+// Connection Monitor
+function initConnectionMonitor() {
+  const badge = document.getElementById('firebaseStatusBadge');
+  setInterval(async () => {
+    const online = await FirebaseService.checkConnection();
+    if (badge) {
+      if (online) {
+        badge.className = 'badge-online';
+        badge.textContent = '● Firebase Online';
+      } else {
+        badge.className = 'badge-offline';
+        badge.textContent = '○ Offline Mode';
       }
     }
+  }, 10000);
+}
+
+// Tab Switching
+function switchTab(tabName) {
+  const tabs = ['scan', 'report', 'analysis', 'master', 'defects'];
+  tabs.forEach(t => {
+    const pane = document.getElementById(`pane-${t}`);
+    const tabHeader = document.getElementById(`tab-${t}-header`);
+    const btnNav = document.getElementById(`btn-tab-${t}`);
+
+    if (pane) pane.style.display = (t === tabName) ? 'flex' : 'none';
+    if (tabHeader) tabHeader.classList.toggle('active', t === tabName);
+    if (btnNav) btnNav.classList.toggle('active', t === tabName);
+  });
+
+  if (tabName === 'scan') {
+    setTimeout(focusScanInput, 100);
+  } else if (tabName === 'analysis') {
+    initChartDates();
+    setTimeout(renderAllCharts, 150);
+  } else if (tabName === 'report') {
+    initReportDates();
+    renderReportTable();
+  } else if (tabName === 'master') {
+    renderMasterDataTable();
+  }
+}
+
+// ============================================================================
+// SCANNING WORKFLOW (3-STEP LOGIC MATCHING DOCX)
+// ============================================================================
+
+function processScanInput(rawVal) {
+  const scanInput = document.getElementById('mainScanInput');
+  if (scanInput) scanInput.value = '';
+
+  if (!rawVal) return;
+  const val = rawVal.toUpperCase().trim();
+
+  // 1. Check for command: ZYYY (LƯU)
+  if (val === 'ZYYY') {
+    handleScanAction('ZYYY');
+    return;
+  }
+
+  // 2. Check for command: ZZZZ (XÓA / HỦY)
+  if (val === 'ZZZZ') {
+    handleScanAction('ZZZZ');
+    return;
+  }
+
+  // 3. Check for Defect Codes: E000 - E011
+  const matchedDefect = defectList.find(d => d.code === val) ||
+    (val.startsWith('E0') ? { code: val, name_en: 'Defect ' + val, name_vi: 'Lỗi ' + val } : null);
+
+  if (matchedDefect) {
+    handleDefectScan(matchedDefect);
+    return;
+  }
+
+  // 4. Otherwise, treat as UCC Scan (Step 1)
+  handleUccScan(val);
+}
+
+// Step 1: Scan UCC
+function handleUccScan(ucc) {
+  // Normalize ucc string
+  const cleanUcc = ucc.replace(/[^0-9]/g, '') || ucc;
+  let item = masterMap[cleanUcc] || masterMap[ucc];
+
+  // If not found by exact string, search by contains or prefix
+  if (!item) {
+    item = masterList.find(m => String(m.UCC_LABEL).includes(cleanUcc));
+  }
+
+  if (item) {
+    // Check if UCC has already been scanned TODAY
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const todayStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
+    const targetUcc = String(item.UCC_LABEL || cleanUcc).trim();
+
+    const alreadyScannedToday = reportData.some(r => {
+      const rUcc = String(r['UCC'] || r['UCC_LABEL'] || r.ucc || '').trim();
+      const rDate = String(r['DATE'] || '').replace(/-/g, '').trim();
+      return rUcc === targetUcc && rDate === todayStr;
+    }) || inputListRecords.some(r => {
+      const rUcc = String(r.ucc || '').trim();
+      const rDate = String(r.date || todayStr).replace(/-/g, '').trim();
+      return rUcc === targetUcc && rDate === todayStr;
+    });
+
+    if (alreadyScannedToday) {
+      SoundService.playError();
+      updateStatusBanner(`CẢNH BÁO: UCC THÙNG CARTON [${targetUcc}] ĐÃ SCAN RỒI! HÃY SCAN UCC KHÁC!`);
+      showToast(`UCC thùng carton này đã scan rồi, hãy scan UCC khác!`, "⚠️");
+      highlightWorkflowStep(1);
+      focusScanInput();
+      return;
+    }
+
+    SoundService.beepScan();
+
+    // Set active session (Waiting for Step 2: Defect Scan)
+    currentScanSession.ucc = item.UCC_LABEL;
+    currentScanSession.masterItem = item;
+    currentScanSession.inputTime = new Date().toTimeString().slice(0, 5);
+    currentScanSession.defCode = null;
+    currentScanSession.defName = null;
+
+    const countryDestMap = {
+      'USA': 'MEMPHIS, TN USA',
+      'JAPAN': 'TOKYO, TK JAPAN',
+      'KOREA': 'BUSAN, KR KOREA',
+      'CHINA': 'SHANGHAI, CN CHINA'
+    };
+
+    // Populate Scan Grid UI (matching image2.png with high contrast & larger typography)
+    document.getElementById('disp-uccLabel').textContent = item.UCC_LABEL;
+    document.getElementById('disp-invoice').textContent = item.INV || '---';
+    document.getElementById('disp-dest').textContent = countryDestMap[item.COUNTRY] || item.COUNTRY || '---';
+    document.getElementById('disp-qty').innerHTML = `<span style="font-size:38px; font-weight:900; color:#0369a1;">${item.QTY || '6'}</span> <span style="font-size:15px; color:#64748b; font-weight:600; margin-left:6px;">đôi</span>`;
+    document.getElementById('disp-model').textContent = `${item.STYLE_NO || ''} • ${item.MODEL || ''}`;
+    document.getElementById('disp-defect').innerHTML = '<span style="color:#d97706; font-weight:800; font-size:16px;">⏳ BƯỚC 2: HÃY QUÉT MÃ LỖI (E000 - E011)...</span>';
+
+    // Update banner & Guide
+    updateStatusBanner(`UCC ${item.UCC_LABEL} LOADED! BƯỚC 2: HÃY SCAN DEFECT TRƯỚC KHI LƯU!`);
+    highlightWorkflowStep(2);
+    showToast(`Đã nhận UCC: ${item.UCC_LABEL}. Hãy scan defect trước khi lưu!`, "📦");
+  } else {
+    SoundService.playError();
+    updateStatusBanner(`LỖI: KHÔNG TÌM THẤY UCC [${ucc}] TRONG MASTER DATA!`);
+    showToast(`Mã UCC ${ucc} không tồn tại trong dữ liệu mẫu!`, "❌");
+  }
+}
+
+// Step 2: Scan Defect Code
+function handleDefectScan(defect) {
+  if (!currentScanSession.ucc) {
+    SoundService.playError();
+    updateStatusBanner(`CẢNH BÁO: HÃY QUÉT UCC TRƯỚC KHI NHẬP MÃ LỖI!`);
+    showToast("Vui lòng quét UCC (Bước 1) trước!", "⚠️");
+    highlightWorkflowStep(1);
+    return;
+  }
+
+  SoundService.beepDefect();
+
+  currentScanSession.defCode = defect.code;
+  currentScanSession.defName = `${defect.code} - ${defect.name_en} (${defect.name_vi})`;
+
+  // Update UI with high-visibility styling
+  const defEl = document.getElementById('disp-defect');
+  if (defect.code === 'E000') {
+    defEl.innerHTML = '<span style="color:#16a34a; font-weight:800;">✅ E000 - KHÔNG LỖI (PASS)</span>';
+  } else {
+    defEl.innerHTML = `<span style="color:#dc2626; font-weight:900;">⚠️ ${defect.code} - ${defect.name_vi} <span style="font-size:15px; color:#64748b; font-weight:600;">(${defect.name_en})</span></span>`;
+  }
+
+  updateStatusBanner(`ĐÃ GHI NHẬN LỖI: ${defect.code}. BƯỚC 3: QUÉT ZYYY ĐỂ LƯU!`);
+  highlightWorkflowStep(3);
+  showToast(`Đã chọn lỗi: ${defect.code} - ${defect.name_vi}`, "🏷️");
+}
+
+// Step 3: Handle Actions (ZYYY or ZZZZ)
+async function handleScanAction(actionCode) {
+  if (actionCode === 'ZZZZ') {
+    // Clear / Reset
+    SoundService.playClear();
+    resetScanSession();
+    updateStatusBanner("SCAN-IN CANCELLED / CLEARED!");
+    highlightWorkflowStep(1);
+    showToast("Đã hủy và làm mới màn hình scan!", "🗑️");
+    focusScanInput();
+    return;
+  }
+
+  if (actionCode === 'ZYYY') {
+    // Save to Firebase
+    if (!currentScanSession.ucc) {
+      SoundService.playError();
+      updateStatusBanner("CẢNH BÁO: CHƯA CÓ THÔNG TIN UCC ĐỂ LƯU!");
+      showToast("Vui lòng quét UCC trước khi lưu!", "⚠️");
+      highlightWorkflowStep(1);
+      focusScanInput();
+      return;
+    }
+
+    // Require defect scan before saving
+    if (!currentScanSession.defCode) {
+      SoundService.playError();
+      updateStatusBanner("CẢNH BÁO: HÃY SCAN DEFECT TRƯỚC KHI LƯU!");
+      showToast("Hãy scan defect trước khi lưu!", "⚠️");
+      highlightWorkflowStep(2);
+      focusScanInput();
+      return;
+    }
+
+    const fctVal = document.getElementById('fctSelect').value || 'VT1';
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const todayStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
+    const timeStr = now.toTimeString().slice(0, 8);
+
+    const countryDestMap = {
+      'USA': 'MEMPHIS, TN USA',
+      'JAPAN': 'TOKYO, TK JAPAN',
+      'KOREA': 'BUSAN, KR KOREA',
+      'CHINA': 'SHANGHAI, CN CHINA'
+    };
+
+    const record = {
+      ucc: currentScanSession.ucc,
+      fct: fctVal,
+      userId: currentUser.id || '22194805',
+      userName: currentUser.name || 'HO XUAN KHANH',
+      invoice: currentScanSession.masterItem.INV,
+      styleNo: currentScanSession.masterItem.STYLE_NO,
+      model: currentScanSession.masterItem.MODEL,
+      poid: currentScanSession.masterItem.POID,
+      qty: currentScanSession.masterItem.QTY,
+      dest: countryDestMap[currentScanSession.masterItem.COUNTRY] || currentScanSession.masterItem.COUNTRY || 'USA',
+      country: currentScanSession.masterItem.COUNTRY || 'USA',
+      defCode: currentScanSession.defCode,
+      defName: currentScanSession.defName,
+      inputTime: currentScanSession.inputTime || timeStr.slice(0, 5),
+      saveTime: timeStr,
+      date: todayStr,
+      plant: currentUser.plant || 'PLANT_A'
+    };
+
+    // Save to Firebase RTDB
+    showToast("Đang lưu bản ghi lên Firebase...", "☁️");
+    const success = await FirebaseService.saveScanRecord(record);
+
+    if (success) {
+      SoundService.playSuccess();
+      updateStatusBanner("SCAN-IN SAVE SUCCESSFUL!");
+
+      // Add to local Input List table (matches image2.png)
+      appendInputListRow(record);
+
+      // Add to report data in memory
+      const repRow = FirebaseService.formatRecordAsReport(record);
+      reportData.unshift(repRow);
+      renderReportTable();
+      renderAllCharts();
+
+      showToast(`Đã lưu thành công UCC ${record.ucc} vào Firebase!`, "✅");
+
+      // Reset scan session for next box
+      resetScanSession();
+      highlightWorkflowStep(1);
+    } else {
+      SoundService.playError();
+      showToast("Lỗi khi lưu dữ liệu lên Firebase!", "❌");
+    }
+
+    focusScanInput();
+  }
+}
+
+function resetScanSession() {
+  currentScanSession = {
+    ucc: null,
+    masterItem: null,
+    defCode: null,
+    defName: null,
+    inputTime: null
+  };
+
+  document.getElementById('disp-uccLabel').textContent = '---';
+  document.getElementById('disp-invoice').textContent = '---';
+  document.getElementById('disp-dest').textContent = '---';
+  document.getElementById('disp-qty').textContent = '---';
+  document.getElementById('disp-model').textContent = '---';
+  document.getElementById('disp-defect').innerHTML = '<span style="color:#94a3b8; font-weight:600;">CHỜ QUÉT</span>';
+}
+
+function appendInputListRow(record) {
+  const tbody = document.getElementById('inputListTableBody');
+  const emptyRow = document.getElementById('emptyScanRow');
+  if (emptyRow) emptyRow.remove();
+
+  const isPass = record.defCode === 'E000';
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><span style="background:#e2e8f0; color:#0f172a; padding:3px 10px; border-radius:12px; font-weight:800; font-size:12px;">TK_${record.fct}</span></td>
+    <td style="color:#0284c7; font-weight:900; font-family:var(--font-mono); font-size:16px; letter-spacing:1px;">${record.ucc}</td>
+    <td style="font-weight:700; font-family:var(--font-mono); font-size:15px;">${record.invoice}</td>
+    <td><span style="background:${isPass ? '#dcfce7' : '#fee2e2'}; color:${isPass ? '#15803d' : '#b91c1c'}; padding:4px 12px; border-radius:12px; font-weight:900; font-size:13px;">${record.defCode}</span></td>
+    <td style="text-align:left; font-weight:700; font-size:14px;">${record.defName}</td>
+    <td style="font-family:var(--font-mono); color:#64748b; font-size:13px; font-weight:600;">${record.saveTime}</td>
+  `;
+  tbody.insertBefore(tr, tbody.firstChild);
+}
+
+function updateStatusBanner(text) {
+  const el = document.getElementById('statusMessageBanner');
+  if (el) {
+    el.textContent = text;
+    el.style.animation = 'none';
+    el.offsetHeight; // trigger reflow
+    el.style.animation = 'pulse 0.5s ease-in-out';
+  }
+}
+
+function highlightWorkflowStep(stepNum) {
+  [1, 2, 3].forEach(n => {
+    const el = document.getElementById(`guide-step-${n}`);
+    if (el) {
+      if (n === stepNum) {
+        el.style.background = '#dbeafe';
+        el.style.padding = '4px 8px';
+        el.style.borderRadius = '4px';
+        el.style.border = '1px solid #3b82f6';
+      } else {
+        el.style.background = 'transparent';
+        el.style.padding = '0';
+        el.style.border = 'none';
+      }
+    }
+  });
+}
+
+// ============================================================================
+// 11 DEFECT BARCODES RENDERING (image1.png)
+// ============================================================================
+
+function renderDefectBarcodesSheet() {
+  const container = document.getElementById('barcodesGridContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // 12 defect barcodes + ZYYY + ZZZZ + INTERNAL USE ONLY
+  const cardsData = [
+    // Row 1
+    { code: 'E001', en: 'Contamination', vi: 'Dơ,Bụi Bẩn' },
+    { code: 'E002', en: 'Bond gap', vi: 'Hở Keo' },
+    { code: 'E003', en: 'Cement', vi: 'Dơ/Lem Keo' },
+    { code: 'E004', en: 'Wrinkle/Crease/Mis-Shape', vi: 'Nhăn/Nếp Gấp/Sai Hình Dáng' },
+    { code: 'E005', en: 'Alignment L+R Symmetry', vi: 'Canh Đối Xứng Trái/Phải' },
+
+    // Row 2
+    { code: 'E006', en: 'Stitching/ Loose Thread', vi: 'Lỗi May/Lỏng Chỉ' },
+    { code: 'E007', en: 'Scratch/ Tear/ Rip/ High Buffing', vi: 'Trầy/Rách/Lủng/Lộ Mài' },
+    { code: 'E008', en: 'Interior (including sock-liner)', vi: 'Lỗi Nội Quan/Bao Gồm (AnChang)' },
+    { code: 'E009', en: 'Poor Quality Spray/ Paint', vi: 'Xịt/Sơn Xấu' },
+    { code: 'E010', en: 'Airbag', vi: 'Lỗi Airbag' },
+
+    // Row 3
+    { code: 'E011', en: 'Other/ Miscellaneous', vi: 'Khác/Các Lỗi Khác' },
+    { code: 'E000', en: 'None Defect', vi: 'Không Lỗi' },
+    { code: 'ZYYY', en: '', vi: '', isSave: true },
+    { code: 'ZZZZ', en: '', vi: '', isClear: true },
+    { isSpecial: true } // INTERNAL USE ONLY
+  ];
+
+  cardsData.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'barcode-card';
+
+    if (item.isSpecial) {
+      card.innerHTML = `<div class="internal-use-badge">INTERNAL USE ONLY</div>`;
+    } else if (item.isSave) {
+      card.innerHTML = `
+        <span class="badge-tag-red">Lưu</span>
+        <svg class="barcode-visual" id="bc-ZYYY"></svg>
+        <div class="barcode-code" style="margin-top:4px;">ZYYY</div>
+      `;
+      card.onclick = () => { switchTab('scan'); handleScanAction('ZYYY'); };
+    } else if (item.isClear) {
+      card.innerHTML = `
+        <span class="badge-tag-red">Xóa</span>
+        <svg class="barcode-visual" id="bc-ZZZZ"></svg>
+        <div class="barcode-code" style="margin-top:4px;">ZZZZ</div>
+      `;
+      card.onclick = () => { switchTab('scan'); handleScanAction('ZZZZ'); };
+    } else {
+      card.innerHTML = `
+        <div class="barcode-code">${item.code}</div>
+        <div class="barcode-name-en">${item.en}</div>
+        <div class="barcode-name-vi">${item.vi}</div>
+        <svg class="barcode-visual" id="bc-${item.code}"></svg>
+      `;
+      card.onclick = () => {
+        switchTab('scan');
+        handleDefectScan({ code: item.code, name_en: item.en, name_vi: item.vi });
+      };
+    }
+
+    container.appendChild(card);
+
+    // Render Barcode SVG using JsBarcode
+    if (item.code && window.JsBarcode) {
+      try {
+        JsBarcode(`#bc-${item.code}`, item.code, {
+          format: "CODE128",
+          width: 1.6,
+          height: 42,
+          displayValue: false,
+          margin: 0
+        });
+      } catch (err) {
+        console.warn(`JsBarcode failed for ${item.code}`, err);
+      }
+    }
+  });
+}
+
+// ============================================================================
+// REPORT SCREEN LOGIC (image3.png)
+// ============================================================================
+
+async function loadReportDataFromFirebase() {
+  showToast("Đang tải dữ liệu báo cáo từ Firebase...", "⏳");
+  reportData = await FirebaseService.getReportData();
+  renderReportTable();
+  showToast(`Đã cập nhật ${reportData.length} dòng báo cáo!`, "✅");
+}
+
+async function clearReportDataUI() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const todayStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
+  const displayDate = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}`;
+
+  const isTodayRecord = (item) => {
+    if (!item) return false;
+    const rawDate = item['DATE'] || item.date;
+    if (rawDate) {
+      const cleaned = String(rawDate).replace(/[^0-9]/g, '').slice(0, 8);
+      if (cleaned.length === 8) return cleaned === todayStr;
+    }
+    if (item.timestamp) {
+      try {
+        const d = new Date(item.timestamp);
+        if (!isNaN(d.getTime())) {
+          const dStr = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+          if (dStr === todayStr) return true;
+        }
+      } catch (e) {}
+    }
+    if (typeof item.id === 'string' && item.id.startsWith('SCAN_')) {
+      const ts = parseInt(item.id.replace('SCAN_', ''), 10);
+      if (ts && !isNaN(ts) && ts > 1000000000000) {
+        const d = new Date(ts);
+        if (!isNaN(d.getTime())) {
+          const dStr = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+          if (dStr === todayStr) return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  if (!confirm(`Bạn có chắc chắn muốn xóa dữ liệu kiểm tra của ngày hôm nay (${displayDate}) không?\n\nLưu ý: Dữ liệu của các ngày trước sẽ được giữ nguyên hoàn toàn.`)) {
+    return;
+  }
+  showToast("Đang xóa dữ liệu báo cáo trong ngày...", "⏳");
+  await FirebaseService.clearTodayReportData(todayStr);
+
+  // Keep all records from previous days, remove only today's records
+  reportData = reportData.filter(r => !isTodayRecord(r));
+  inputListRecords = inputListRecords.filter(r => !isTodayRecord(r));
+
+  // If scan table exists on current page, refresh it
+  const inputListTbody = document.getElementById('inputListTableBody');
+  if (inputListTbody) {
+    inputListTbody.innerHTML = `
+      <tr id="emptyScanRow">
+        <td colspan="6" style="padding: 24px; color:#94a3b8; font-style:italic;">
+          Chưa có kiện hàng nào được quét trong phiên làm việc này.
+        </td>
+      </tr>
+    `;
+    inputListRecords.forEach(rec => appendInputListRow(rec));
+  }
+
+  renderReportTable();
+  renderAllCharts();
+  showToast(`Đã xóa dữ liệu kiểm tra ngày hôm nay (${displayDate}) thành công!`, "✅");
+}
+
+function renderReportTable() {
+  const tbody = document.getElementById('reportTableBody');
+  if (!tbody) return;
+
+  const fctFilter = document.getElementById('filterReportFct')?.value || '';
+  const plantFilter = document.getElementById('filterReportPlant')?.value || '';
+  const dateFrom = (document.getElementById('filterReportDateFrom')?.value || '').replace(/-/g, '');
+  const dateTo = (document.getElementById('filterReportDateTo')?.value || '').replace(/-/g, '');
+  const searchQ = (document.getElementById('searchReportQuery')?.value || '').toLowerCase().trim();
+
+  // Filter rows
+  const filtered = reportData.filter(row => {
+    if (fctFilter && !String(row['Factory Group'] || '').includes(fctFilter)) return false;
+    if (plantFilter && row['PLANT'] !== plantFilter) return false;
+
+    const rDate = String(row['DATE'] || '');
+    if (dateFrom && rDate && rDate < dateFrom) return false;
+    if (dateTo && rDate && rDate > dateTo) return false;
+
+    if (searchQ) {
+      const matchText = `${row['UCC'] || row['UCC_LABEL'] || ''} ${row['STYLE NO'] || ''} ${row['MODEL'] || ''} ${row['PO NUMBER'] || ''} ${row['INV'] || ''} ${row['DEST'] || ''}`.toLowerCase();
+      if (!matchText.includes(searchQ)) return false;
+    }
+    return true;
+  });
+
+  // Render rows
+  tbody.innerHTML = '';
+
+  if (filtered.length === 0) {
+    const tr = document.createElement('tr');
+    tr.id = 'emptyReportRow';
+    tr.innerHTML = `
+      <td colspan="27" style="padding: 36px 16px; color: #64748b; text-align: center; font-size: 14px;">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <span style="font-size:32px;">📋</span>
+          <span style="font-weight:700; color:#334155; font-size:15px;">Chưa có dữ liệu kiểm tra</span>
+          <span style="font-size:13px; color:#94a3b8;">Dữ liệu sẽ tự động xuất hiện tại đây khi bạn quét UCC, chọn lỗi và quét <strong>ZYYY (LƯU)</strong> ở màn hình <strong>3IZ SCAN</strong>.</span>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  let totQty = 0;
+  let totCarton = 0;
+  let totTime = 0;
+  let totDefect = 0;
+  let defectCounts = {
+    e001: 0, e002: 0, e003: 0, e004: 0, e005: 0,
+    e006: 0, e007: 0, e008: 0, e009: 0, e010: 0, e011: 0
+  };
+
+  filtered.forEach((r, idx) => {
+    const qty = parseInt(r['3iZ QTY'] || r['QTY'] || 0) || 0;
+    const carton = parseInt(r['CARTON QTY'] || r['CARTON'] || 1) || 1;
+    const time = parseFloat(r['INSPECTION TIME (MINUTES)'] || 0) || 0;
+    const def = parseInt(r['Total defective qty'] || 0) || 0;
+
+    totQty += qty;
+    totCarton += carton;
+    totTime += time;
+    totDefect += def;
+
+    defectCounts.e001 += parseInt(r['Contamination'] || 0) || 0;
+    defectCounts.e002 += parseInt(r['Bond Gap'] || 0) || 0;
+    defectCounts.e003 += parseInt(r['Cement'] || 0) || 0;
+    defectCounts.e004 += parseInt(r['Wrinkle_Crease_Mis-Shape'] || r['Wrinkle/Crease/Mis-Shape'] || 0) || 0;
+    defectCounts.e005 += parseInt(r['Alignment L+R Symmetry'] || 0) || 0;
+    defectCounts.e006 += parseInt(r['Stitching_ Loose Thread'] || r['Stitching/ Loose Thread'] || 0) || 0;
+    defectCounts.e007 += parseInt(r['Scratch_ Tear_ Rip_ High Buffing'] || r['Scratch/ Tear/ Rip/ High Buffing'] || 0) || 0;
+    defectCounts.e008 += parseInt(r['Interior (including sock-liner)'] || 0) || 0;
+    defectCounts.e009 += parseInt(r['Poor Quality Spray_ Paint'] || r['Poor Quality Spray/ Paint'] || 0) || 0;
+    defectCounts.e010 += parseInt(r['Airbag'] || 0) || 0;
+    defectCounts.e011 += parseInt(r['Other_ Miscellaneous'] || r['Other/ Miscellaneous'] || 0) || 0;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-weight:bold; color:#0284c7;">${idx + 1}</td>
+      <td>${r['Factory Group'] || 'TK_VT1'}</td>
+      <td>${r['PLANT'] || 'PLANT_A'}</td>
+      <td>${r['DATE'] || ''}</td>
+      <td style="font-family:monospace; font-weight:bold; color:#0369a1;">${r['UCC'] || r['UCC_LABEL'] || ''}</td>
+      <td style="font-weight:600;">${r['STYLE NO'] || ''}</td>
+      <td style="text-align:left;">${r['MODEL'] || ''}</td>
+      <td>${r['PO NUMBER'] || ''}</td>
+      <td>${r['INV'] || ''}</td>
+      <td style="font-weight:bold;">${qty}</td>
+      <td>${carton}</td>
+      <td style="text-align:left;">${r['DEST'] || ''}</td>
+      <td>${r['INPUT TIME'] || ''}</td>
+      <td>${r['OUTPUT TIME'] || ''}</td>
+      <td>${time}</td>
+      <td style="font-weight:bold; color:${def > 0 ? '#dc2626' : '#15803d'}">${def}</td>
+      <td>${r['Contamination'] || 0}</td>
+      <td>${r['Bond Gap'] || 0}</td>
+      <td>${r['Cement'] || 0}</td>
+      <td>${r['Wrinkle_Crease_Mis-Shape'] || r['Wrinkle/Crease/Mis-Shape'] || 0}</td>
+      <td>${r['Alignment L+R Symmetry'] || 0}</td>
+      <td>${r['Stitching_ Loose Thread'] || r['Stitching/ Loose Thread'] || 0}</td>
+      <td>${r['Scratch_ Tear_ Rip_ High Buffing'] || r['Scratch/ Tear/ Rip/ High Buffing'] || 0}</td>
+      <td>${r['Interior (including sock-liner)'] || 0}</td>
+      <td>${r['Poor Quality Spray_ Paint'] || r['Poor Quality Spray/ Paint'] || 0}</td>
+      <td>${r['Airbag'] || 0}</td>
+      <td>${r['Other_ Miscellaneous'] || r['Other/ Miscellaneous'] || 0}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Update Totals row in footer
+  document.getElementById('tot-qty').textContent = totQty.toLocaleString();
+  document.getElementById('tot-carton').textContent = totCarton.toLocaleString();
+  document.getElementById('avg-time').textContent = filtered.length > 0 ? (totTime / filtered.length).toFixed(2) : '0.0';
+  document.getElementById('tot-def').textContent = totDefect.toLocaleString();
+
+  document.getElementById('tot-e001').textContent = defectCounts.e001;
+  document.getElementById('tot-e002').textContent = defectCounts.e002;
+  document.getElementById('tot-e003').textContent = defectCounts.e003;
+  document.getElementById('tot-e004').textContent = defectCounts.e004;
+  document.getElementById('tot-e005').textContent = defectCounts.e005;
+  document.getElementById('tot-e006').textContent = defectCounts.e006;
+  document.getElementById('tot-e007').textContent = defectCounts.e007;
+  document.getElementById('tot-e008').textContent = defectCounts.e008;
+  document.getElementById('tot-e009').textContent = defectCounts.e009;
+  document.getElementById('tot-e010').textContent = defectCounts.e010;
+  document.getElementById('tot-e011').textContent = defectCounts.e011;
+
+  const countEl = document.getElementById('reportTotalRowsCount');
+  if (countEl) countEl.textContent = `Hiển thị: ${filtered.length} / ${reportData.length} dòng`;
+}
+
+function applyReportFilter() {
+  renderReportTable();
+}
+
+// Download Excel (Using SheetJS)
+function exportReportToExcel() {
+  if (!window.XLSX) {
+    alert("Thư viện Excel đang tải, vui lòng thử lại sau 2 giây!");
+    return;
+  }
+  showToast("Đang tạo file Excel...", "📊");
+
+  const table = document.getElementById('mainReportTable');
+  const wb = XLSX.utils.table_to_book(table, { sheet: "3IZ REPORT" });
+  const filename = `Inspection_Report_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  XLSX.writeFile(wb, filename);
+  showToast(`Đã tải xuống ${filename}!`, "✅");
+}
+
+// ============================================================================
+// MASTER DATA SCREEN (DU LIEU MAU_ CHUAN.txt)
+// ============================================================================
+
+function populateMasterCountryOptions() {
+  const select = document.getElementById('filterMasterCountry');
+  if (!select) return;
+  const currentVal = select.value;
+  const countries = [...new Set(masterList.map(item => (item.COUNTRY || '').trim()).filter(Boolean))].sort();
+  if (countries.length === 0) return;
+
+  const existingOptions = Array.from(select.options).map(o => o.value).filter(Boolean);
+  const isMatch = countries.length === existingOptions.length && countries.every(c => existingOptions.includes(c));
+  if (!isMatch) {
+    select.innerHTML = '<option value="">Tất cả quốc gia</option>' +
+      countries.map(c => `<option value="${c}">${c}</option>`).join('');
+    if (currentVal && countries.includes(currentVal)) {
+      select.value = currentVal;
+    }
+  }
+}
+
+function renderMasterDataTable() {
+  const tbody = document.getElementById('masterDataTableBody');
+  if (!tbody) return;
+
+  populateMasterCountryOptions();
+
+  const searchQ = (document.getElementById('searchMasterQuery')?.value || '').toLowerCase().trim();
+  const countryQ = document.getElementById('filterMasterCountry')?.value || '';
+
+  const filtered = masterList.filter(item => {
+    if (countryQ && item.COUNTRY !== countryQ) return false;
+    if (searchQ) {
+      const text = `${item.UCC_LABEL} ${item.STYLE_NO} ${item.MODEL} ${item.POID} ${item.INV} ${item.COUNTRY}`.toLowerCase();
+      if (!text.includes(searchQ)) return false;
+    }
+    return true;
+  });
+
+  const countryColors = {
+    'USA': '#1d4ed8',
+    'JAPAN': '#dc2626',
+    'KOREA': '#059669',
+    'CHINA': '#d97706'
+  };
+
+  tbody.innerHTML = '';
+  filtered.forEach((item, idx) => {
+    const tr = document.createElement('tr');
+    const cColor = countryColors[item.COUNTRY] || '#334155';
+    tr.innerHTML = `
+      <td>${idx + 1}</td>
+      <td style="font-family:monospace; font-weight:bold; color:#0369a1;">${item.UCC_LABEL}</td>
+      <td style="font-weight:600;">${item.STYLE_NO}</td>
+      <td>${item.POID}</td>
+      <td>${item.SIZE}</td>
+      <td>${item.UPC_LABEL}</td>
+      <td style="text-align:left;">${item.MODEL}</td>
+      <td>${item.MSR}</td>
+      <td>${item.INV}</td>
+      <td style="font-weight:bold;">${item.QTY}</td>
+      <td>${item.CARTON}</td>
+      <td style="font-weight:bold; color:${cColor};">${item.COUNTRY}</td>
+      <td>
+        <button type="button" class="nav-item-btn" style="color:var(--dark-teal); font-size:11px;" onclick="selectUccForScan('${item.UCC_LABEL}')">
+          Quét UCC này
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const countDisp = document.getElementById('masterDataCountDisplay');
+  if (countDisp) countDisp.textContent = `Tổng số: ${filtered.length} / ${masterList.length} bản ghi`;
+}
+
+function filterMasterData() {
+  renderMasterDataTable();
+}
+
+function selectUccForScan(ucc) {
+  switchTab('scan');
+  handleUccScan(ucc);
+}
+
+async function syncMasterToFirebaseUI() {
+  showToast("Đang đồng bộ Master Data lên Firebase...", "☁️");
+  const ok = await FirebaseService.syncMasterDataToFirebase(masterList);
+  if (ok) {
+    showToast("Đã đồng bộ 153 bản ghi Master Data lên Firebase thành công!", "✅");
+  } else {
+    showToast("Đồng bộ Master Data thất bại!", "❌");
+  }
+}
+
+async function syncAllToFirebase() {
+  showToast("Đang đẩy toàn bộ dữ liệu mẫu lên Firebase...", "🚀");
+  const ok1 = await FirebaseService.syncMasterDataToFirebase(masterList);
+  showToast(ok1 ? "Đã đẩy Master Data thành công!" : "Lỗi đẩy dữ liệu!", ok1 ? "✅" : "❌");
+}
+
+// ============================================================================
+// 3IZ ANALYSIS CHARTS (image4.png)
+// ============================================================================
+
+function getRecordFct(r) {
+  if (r['FCT']) return String(r['FCT']).trim();
+  if (r.fct) return String(r.fct).trim();
+  const fg = String(r['Factory Group'] || '').trim();
+  if (fg.startsWith('TK_')) return fg.replace('TK_', '');
+  return fg || 'VT1';
+}
+
+function renderAllCharts() {
+  if (!window.Chart) return;
+
+  initChartDates(false);
+
+  const fctFilter = (document.getElementById('chartFilterFct')?.value || document.getElementById('chartFilterPlant')?.value || '').trim();
+  const countryFilter = (document.getElementById('chartFilterCountry')?.value || '').trim();
+  const dateFrom = (document.getElementById('chartDateFrom')?.value || '').replace(/-/g, '');
+  const dateTo = (document.getElementById('chartDateTo')?.value || '').replace(/-/g, '');
+
+  // Strictly filter directly from reportData (3IZ REPORT data)
+  const data = reportData.filter(r => {
+    if (fctFilter) {
+      const recFct = getRecordFct(r);
+      if (recFct !== fctFilter && !String(r['Factory Group'] || '').includes(fctFilter)) return false;
+    }
+    if (countryFilter && String(r['COUNTRY'] || '').toUpperCase() !== countryFilter.toUpperCase()) return false;
+    const rDate = String(r['DATE'] || '');
+    if (dateFrom && rDate && rDate < dateFrom) return false;
+    if (dateTo && rDate && rDate > dateTo) return false;
+    return true;
+  });
+
+  // 1. Chart: INSPECTION QTY BY FCT (Converted from Plant)
+  renderChartQtyByFct(data);
+
+  // 2. Chart: TOP 5 DEFECT QTY BY MODEL
+  renderChartTopDefectByModel(data);
+
+  // 3. Chart: AVERAGE OF INSPECTION TIME BY FCT (MINUTE) (Converted from Plant)
+  renderChartAvgInspectionTimeByFct(data);
+
+  // 4. Chart: TOP 4 DEFECT BY DEST
+  renderChartDefectByDest(data);
+
+  // 5. Chart: INSPECTION QTY BY DEST
+  renderChartQtyByDest(data);
+
+  // 6. Chart: TOP 4 DEFECT
+  renderChartTopDefects(data);
+}
+
+// 1. INSPECTION QTY BY FCT (Bar chart - converted from Plant)
+function renderChartQtyByFct(data) {
+  const ctx = (document.getElementById('chartQtyByPlant') || document.getElementById('chartQtyByFct'))?.getContext('2d');
+  if (!ctx) return;
+
+  const counts = {};
+  data.forEach(r => {
+    const fct = getRecordFct(r);
+    const qty = parseInt(r['3iZ QTY'] || r['QTY'] || 0) || 0;
+    counts[fct] = (counts[fct] || 0) + qty;
+  });
+
+  let labels = Object.keys(counts).sort();
+  let values = labels.map(l => counts[l]);
+
+  if (labels.length === 0) {
+    labels = ['VT1', 'VT2', 'VT3', 'VT7'];
+    values = [0, 0, 0, 0];
+  }
+
+  if (charts.qtyByPlant) charts.qtyByPlant.destroy();
+  charts.qtyByPlant = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Sản lượng kiểm tra (Qty)',
+        data: values,
+        backgroundColor: '#0ea5e9',
+        borderColor: '#0284c7',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (c) => ` Sản lượng: ${c.parsed.y.toLocaleString()} đôi`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#e2e8f0' },
+          ticks: { precision: 0 }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// 2. TOP 5 DEFECT QTY BY MODEL (Horizontal Bar)
+function renderChartTopDefectByModel(data) {
+  const ctx = document.getElementById('chartTopDefectByModel')?.getContext('2d');
+  if (!ctx) return;
+
+  const modelDefects = {};
+  data.forEach(r => {
+    const model = r['MODEL'] || 'UNKNOWN';
+    const def = parseInt(r['Total defective qty'] || 0) || 0;
+    modelDefects[model] = (modelDefects[model] || 0) + def;
+  });
+
+  // Sort descending and take top 5
+  let sorted = Object.entries(modelDefects)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
+  let labels = sorted.map(s => s[0]);
+  let values = sorted.map(s => s[1]);
+
+  if (labels.length === 0) {
+    labels = ['Chưa có dữ liệu'];
+    values = [0];
+  }
+
+  if (charts.topDefectByModel) charts.topDefectByModel.destroy();
+  charts.topDefectByModel = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Số lượng lỗi (Defect Qty)',
+        data: values,
+        backgroundColor: '#0284c7',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (c) => ` Số lỗi: ${c.parsed.x} đôi`
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: '#e2e8f0' },
+          ticks: { precision: 0 }
+        },
+        y: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } }
+      }
+    }
+  });
+}
+
+// 3. AVERAGE OF INSPECTION TIME BY FCT (MINUTE - converted from Plant)
+function renderChartAvgInspectionTimeByFct(data) {
+  const ctx = document.getElementById('chartAvgInspectionTime')?.getContext('2d');
+  if (!ctx) return;
+
+  const fctTimes = {};
+  data.forEach(r => {
+    const fct = getRecordFct(r);
+    const time = parseFloat(r['INSPECTION TIME (MINUTES)'] || 0) || 0;
+    if (!fctTimes[fct]) fctTimes[fct] = { sum: 0, count: 0 };
+    fctTimes[fct].sum += time;
+    fctTimes[fct].count++;
+  });
+
+  let labels = Object.keys(fctTimes).sort();
+  let values = labels.map(l => (fctTimes[l].sum / fctTimes[l].count).toFixed(1));
+
+  if (labels.length === 0) {
+    labels = ['VT1', 'VT2', 'VT3', 'VT7'];
+    values = [0, 0, 0, 0];
+  }
+
+  if (charts.avgTime) charts.avgTime.destroy();
+  charts.avgTime = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Thời gian TB (Phút)',
+        data: values,
+        backgroundColor: '#0ea5e9',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (c) => ` Thời gian TB: ${c.parsed.y} phút`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#e2e8f0' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// 4. TOP 4 DEFECT BY DEST (Grouped Bar from real data)
+function renderChartDefectByDest(data) {
+  const ctx = document.getElementById('chartDefectByDest')?.getContext('2d');
+  if (!ctx) return;
+
+  const foundCountries = [...new Set(data.map(r => String(r['COUNTRY'] || '').toUpperCase()).filter(Boolean))];
+  const countries = foundCountries.length ? foundCountries : ['CHINA', 'JAPAN', 'KOREA', 'USA'];
+
+  const defectKeys = [
+    { label: 'Contamination', key: 'Contamination' },
+    { label: 'Bond Gap', key: 'Bond Gap' },
+    { label: 'Cement', key: 'Cement' },
+    { label: 'Wrinkle', key: 'Wrinkle_Crease_Mis-Shape' }
+  ];
+
+  const colors = ['#0284c7', '#38bdf8', '#7dd3fc', '#bae6fd'];
+  const datasets = defectKeys.map((def, idx) => {
+    return {
+      label: def.label,
+      data: countries.map(c => {
+        return data
+          .filter(r => String(r['COUNTRY'] || '').toUpperCase() === c)
+          .reduce((sum, r) => sum + (parseInt(r[def.key] || 0) || 0), 0);
+      }),
+      backgroundColor: colors[idx % colors.length],
+      borderRadius: 3
+    };
+  });
+
+  if (charts.defectByDest) charts.defectByDest.destroy();
+  charts.defectByDest = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: countries,
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#e2e8f0' },
+          ticks: { precision: 0 }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// 5. INSPECTION QTY BY DEST (Horizontal Bar from real data)
+function renderChartQtyByDest(data) {
+  const ctx = document.getElementById('chartQtyByDest')?.getContext('2d');
+  if (!ctx) return;
+
+  const foundDests = [...new Set(data.map(r => String(r['COUNTRY'] || '').toUpperCase()).filter(Boolean))];
+  const dests = foundDests.length ? foundDests : ['USA', 'KOREA', 'JAPAN', 'CHINA'];
+
+  const values = dests.map(d => {
+    return data
+      .filter(r => String(r['COUNTRY'] || '').toUpperCase() === d)
+      .reduce((sum, r) => sum + (parseInt(r['3iZ QTY'] || r['QTY'] || 0) || 0), 0);
+  });
+
+  if (charts.qtyByDest) charts.qtyByDest.destroy();
+  charts.qtyByDest = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: dests,
+      datasets: [{
+        data: values,
+        backgroundColor: '#38bdf8',
+        borderRadius: 3
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (c) => ` Sản lượng: ${c.parsed.x.toLocaleString()} đôi`
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: '#f1f5f9' },
+          ticks: { font: { size: 9 }, precision: 0 }
+        },
+        y: { grid: { display: false }, ticks: { font: { size: 9 } } }
+      }
+    }
+  });
+}
+
+// 6. TOP 4 DEFECT (Bar chart calculated from real data)
+function renderChartTopDefects(data) {
+  const ctx = document.getElementById('chartTopDefects')?.getContext('2d');
+  if (!ctx) return;
+
+  const defectCounts = {
+    'Contamination': 0,
+    'Bond Gap': 0,
+    'Cement': 0,
+    'Wrinkle': 0,
+    'Alignment': 0,
+    'Stitching': 0,
+    'Scratch': 0,
+    'Interior': 0,
+    'Poor Paint': 0,
+    'Airbag': 0,
+    'Other': 0
+  };
+
+  data.forEach(r => {
+    defectCounts['Contamination'] += parseInt(r['Contamination'] || 0) || 0;
+    defectCounts['Bond Gap'] += parseInt(r['Bond Gap'] || 0) || 0;
+    defectCounts['Cement'] += parseInt(r['Cement'] || 0) || 0;
+    defectCounts['Wrinkle'] += parseInt(r['Wrinkle_Crease_Mis-Shape'] || r['Wrinkle/Crease/Mis-Shape'] || 0) || 0;
+    defectCounts['Alignment'] += parseInt(r['Alignment L+R Symmetry'] || 0) || 0;
+    defectCounts['Stitching'] += parseInt(r['Stitching_ Loose Thread'] || r['Stitching/ Loose Thread'] || 0) || 0;
+    defectCounts['Scratch'] += parseInt(r['Scratch_ Tear_ Rip_ High Buffing'] || r['Scratch/ Tear/ Rip/ High Buffing'] || 0) || 0;
+    defectCounts['Interior'] += parseInt(r['Interior (including sock-liner)'] || 0) || 0;
+    defectCounts['Poor Paint'] += parseInt(r['Poor Quality Spray_ Paint'] || r['Poor Quality Spray/ Paint'] || 0) || 0;
+    defectCounts['Airbag'] += parseInt(r['Airbag'] || 0) || 0;
+    defectCounts['Other'] += parseInt(r['Other_ Miscellaneous'] || r['Other/ Miscellaneous'] || 0) || 0;
+  });
+
+  const sorted = Object.entries(defectCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
+
+  let labels = sorted.map(s => s[0]);
+  let values = sorted.map(s => s[1]);
+
+  if (charts.topDefects) charts.topDefects.destroy();
+  charts.topDefects = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: '#0284c7',
+        borderRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (c) => ` Số lỗi: ${c.parsed.y} lỗi`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#f1f5f9' },
+          ticks: { font: { size: 9 }, precision: 0 }
+        },
+        x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+      }
+    }
+  });
+}
+
+// ============================================================================
+// LOGIN / USER MODAL
+// ============================================================================
+
+function openLoginModal() {
+  const modal = document.getElementById('loginModalOverlay');
+  if (modal) modal.classList.add('active');
+}
+
+function closeLoginModal() {
+  const modal = document.getElementById('loginModalOverlay');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleLoginSubmit() {
+  const userId = document.getElementById('loginUserId').value;
+  const pass = document.getElementById('loginPassword').value;
+  const fct = document.getElementById('loginFct').value;
+
+  const res = await FirebaseService.login(userId, pass, fct);
+  if (res.success) {
+    currentUser = res.user;
+    initUser();
+    closeLoginModal();
+    showToast(`Đăng nhập thành công! Chào ${currentUser.name} (${currentUser.fct})`, "👤");
+  }
+}
+
+// Helpers: Toast & Sound
+function showToast(text, icon = "🔔") {
+  const toast = document.getElementById('globalToast');
+  const tText = document.getElementById('toastText');
+  const tIcon = document.getElementById('toastIcon');
+  if (!toast) return;
+
+  tText.textContent = text;
+  tIcon.textContent = icon;
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3500);
+}
+
+function toggleSound() {
+  SoundService.muted = !SoundService.muted;
+  const icon = document.getElementById('soundToggleIcon');
+  if (icon) icon.textContent = SoundService.muted ? '🔇 ⚙️' : '🔊 ⚙️';
+  showToast(SoundService.muted ? "Đã tắt âm thanh" : "Đã bật âm thanh", SoundService.muted ? "🔇" : "🔊");
+}
+
+function showHelp() {
+  alert(
+    "QUY TRÌNH QUÉT HÀNG:\n\n" +
+    "1. Quét mã UCC vào ô DOC# OR PCARD SCAN -> Hệ thống tự động điền thông tin.\n" +
+    "2. Quét mã lỗi (E001 - E011, E000) -> Hệ thống ghi nhận lỗi vào bảng.\n" +
+    "3. Quét ZYYY để LƯU dữ liệu lên Firebase.\n" +
+    "4. Quét ZZZZ để XÓA / HỦY lượt quét hiện tại.\n\n" +
+    "Bạn có thể click trực tiếp vào các thẻ mã vạch ở tab 'Defect Barcodes (11 Lỗi)' để quét nhanh!"
+  );
+}
+
+// Expose globals for inline event handlers
+window.switchTab = switchTab;
+window.processScanInput = processScanInput;
+window.handleScanAction = handleScanAction;
+window.selectUccForScan = selectUccForScan;
+window.syncMasterToFirebaseUI = syncMasterToFirebaseUI;
+window.syncAllToFirebase = syncAllToFirebase;
+window.loadReportDataFromFirebase = loadReportDataFromFirebase;
+window.clearReportDataUI = clearReportDataUI;
+window.applyReportFilter = applyReportFilter;
+window.initReportDates = initReportDates;
+window.initChartDates = initChartDates;
+window.exportReportToExcel = exportReportToExcel;
+window.filterMasterData = filterMasterData;
+window.populateMasterCountryOptions = populateMasterCountryOptions;
+window.renderAllCharts = renderAllCharts;
+window.openLoginModal = openLoginModal;
+window.closeLoginModal = closeLoginModal;
+window.handleLoginSubmit = handleLoginSubmit;
+window.toggleSound = toggleSound;
+window.showHelp = showHelp;
+window.charts = charts;
+window.getReportDataArray = () => reportData;
+window.setReportData = (d) => { reportData = d; };
+window.getCurrentScanSession = () => currentScanSession;
+
+// Sync across multiple browser tabs/windows
+window.addEventListener('storage', async (e) => {
+  if (e.key === 'local_scans') {
+    reportData = await FirebaseService.getReportData();
+    renderReportTable();
+    renderAllCharts();
+  }
+});
+
+</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      switchTab('master');
+      renderMasterDataTable();
+    });
   </script>
 </body>
 </html>
