@@ -494,7 +494,37 @@
     .key-actions {
       display: flex;
       align-items: center;
-      gap: 10px
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .api-status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease
+    }
+
+    .api-status-badge.checking {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0
+    }
+
+    .api-status-badge.success {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0
+    }
+
+    .api-status-badge.error {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca
     }
 
     .key-head label {
@@ -889,15 +919,15 @@
         <div class="key-config">
           <div class="key-head"><label for="api-key">Gemini API key</label>
             <div class="key-actions">
-              <button type="button" id="toggle-key-visibility" class="key-action-btn" title="Hiện hoặc ẩn API key">Hiện
-                key</button>
+              <span id="api-status-badge" class="api-status-badge checking">Đang kiểm tra kết nối…</span>
+              <button type="button" id="toggle-key-visibility" class="key-action-btn" title="Hiện hoặc ẩn API key">Hiện key</button>
               <button type="button" id="reset-default-key" class="key-action-btn"
                 title="Khôi phục về API key mặc định">Mặc định</button>
               <a href="https://aistudio.google.com/api-keys" target="_blank" rel="noopener noreferrer">Lấy API key ↗</a>
             </div>
           </div>
           <input class="api-input" id="api-key" type="password"
-            value="AQ.Ab8RN6LMo6b4yV50Otdf0aUItM5H0UK6N9cOA7VRFUIctLTiKw"
+            value="AQ.Ab8RN6JbWk9nU9EmN8gKZwYV4ngm_7QQ7F8llhaqeYlPgmJwAA"
             placeholder="Dán API key của bạn vào đây (hoặc dùng mặc định)" autocomplete="new-password"
             spellcheck="false" aria-describedby="key-note">
           <p class="key-note" id="key-note">Key mặc định đã được gắn sẵn. Nếu muốn đổi, bạn chỉ cần xóa đi và nhập key
@@ -975,7 +1005,7 @@
         required: ['assessment', 'suggested', 'explanationVi', 'reply', 'replyVi']
       };
 
-      const DEFAULT_API_KEY = 'AQ.Ab8RN6LMo6b4yV50Otdf0aUItM5H0UK6N9cOA7VRFUIctLTiKw';
+      const DEFAULT_API_KEY = 'AQ.Ab8RN6JbWk9nU9EmN8gKZwYV4ngm_7QQ7F8llhaqeYlPgmJwAA';
       const FIREBASE_BASE_URL = 'https://englishtalk-17f02-default-rtdb.asia-southeast1.firebasedatabase.app';
       const $key = $('#api-key');
       $key.val(DEFAULT_API_KEY);
@@ -991,6 +1021,39 @@
       const $historyList = $('#history-list');
       const $closeHistoryModal = $('#close-history-modal');
       const $clearAllSessionsBtn = $('#clear-all-sessions-btn');
+
+      async function checkGeminiConnection(keyToCheck) {
+        const apiKey = (keyToCheck || $key.val() || '').trim();
+        const $badge = $('#api-status-badge');
+        $badge.removeClass('success error').addClass('checking').text('Đang kiểm tra kết nối…');
+
+        if (!apiKey) {
+          $badge.removeClass('checking success').addClass('error').text('Chưa có API key');
+          setStatus('Chưa có Gemini API key. Hãy nhập key hoặc bấm "Mặc định".', true);
+          return false;
+        }
+
+        try {
+          const testUrl = 'https://generativelanguage.googleapis.com/v1beta/models/' + MODEL + '?key=' + encodeURIComponent(apiKey);
+          const res = await fetch(testUrl, {
+            headers: { 'x-goog-api-key': apiKey }
+          });
+          if (res.ok) {
+            $badge.removeClass('checking error').addClass('success').text('✓ Đã kết nối Gemini');
+            setStatus('✓ Kết nối đến API Gemini thành công! Sẵn sàng trò chuyện.');
+            return true;
+          } else {
+            const errText = explainApiError(res.status);
+            $badge.removeClass('checking success').addClass('error').text('✗ Lỗi kết nối (' + res.status + ')');
+            setStatus('✗ Kết nối đến Gemini API thất bại: ' + errText, true);
+            return false;
+          }
+        } catch (err) {
+          $badge.removeClass('checking success').addClass('error').text('✗ Không kết nối được');
+          setStatus('✗ Không thể kết nối tới Google Gemini. Hãy kiểm tra mạng Internet.', true);
+          return false;
+        }
+      }
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       let recognition = null;
@@ -1582,6 +1645,13 @@
         }
       });
 
+      // Luôn kiểm tra kết nối API Gemini khi load trang
+      checkGeminiConnection(DEFAULT_API_KEY);
+
+      $key.on('change', function () {
+        checkGeminiConnection($key.val());
+      });
+
       $('#toggle-key-visibility').on('click', function () {
         const isPassword = $key.attr('type') === 'password';
         $key.attr('type', isPassword ? 'text' : 'password');
@@ -1590,7 +1660,7 @@
 
       $('#reset-default-key').on('click', function () {
         $key.val(DEFAULT_API_KEY);
-        setStatus('Đã khôi phục API key mặc định.');
+        checkGeminiConnection(DEFAULT_API_KEY);
       });
     });
 
