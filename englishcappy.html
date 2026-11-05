@@ -1269,7 +1269,7 @@
         const endpoint = API_URL + '?key=' + encodeURIComponent(apiKey);
         const res = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{
               role: 'user',
@@ -1464,14 +1464,15 @@
           const endpoint = API_URL + '?key=' + encodeURIComponent(apiKey);
           const response = await fetch(endpoint, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
               contents: nextHistory,
-              // JSON có cấu trúc để tách nhận xét, gợi ý và câu trả lời hội thoại.
+              // Yêu cầu Gemini trả về JSON có cấu trúc để tách nhận xét, gợi ý và câu trả lời.
               generationConfig: {
                 maxOutputTokens: 1024,
-                responseFormat: { text: { mimeType: 'APPLICATION_JSON', schema: COACH_SCHEMA } }
+                responseMimeType: 'application/json',
+                responseSchema: COACH_SCHEMA
               }
             }),
             signal: controller.signal
