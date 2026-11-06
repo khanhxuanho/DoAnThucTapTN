@@ -2237,100 +2237,109 @@
         }
       }
 
+      // Phát âm thanh bằng Google Cloud TTS API (MP3 base64) — hoạt động trên mọi thiết bị
+      async function speakWithCloudTts(text, apiKey, lang) {
+        const langCode = (lang === 'zh') ? 'zh-CN' : 'en-US';
+        const voiceName = (lang === 'zh') ? 'zh-CN-Standard-A' : 'en-US-Standard-C';
+        try {
+          const res = await fetch(
+            'https://texttospeech.googleapis.com/v1/text:synthesize?key=' + encodeURIComponent(apiKey),
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                input: { text: text },
+                voice: { languageCode: langCode, name: voiceName },
+                audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9 }
+              })
+            }
+          );
+          if (!res.ok) {
+            const err = await res.json().catch(function () { return {}; });
+            const msg = (err && err.error && err.error.message) || ('HTTP ' + res.status);
+            throw new Error(msg);
+          }
+          const data = await res.json();
+          if (!data.audioContent) throw new Error('Không có dữ liệu âm thanh.');
+          const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+          currentAudio = audio;
+          await audio.play();
+        } catch (e) {
+          console.warn('Cloud TTS lỗi:', e);
+          throw e;
+        }
+      }
+
+      // Phát âm thanh: ưu tiên Web Speech API (desktop), fallback Cloud TTS (mobile)
       function speak(text) {
         if (!text || !text.trim()) return;
         stopCurrentAudio();
 
+        const apiKey = ($key && $key.val()) ? $key.val().trim() : '';
+        const lang = currentLang;
+
+        // Tiếng Hoa: dùng Cloud TTS ngay (đáng tin cậy trên mọi thiết bị)
+        // Tiếng Anh: dùng Web SpeechSynthesis (nhanh, không tốn quota)
+        if (lang === 'zh') {
+          if (!apiKey) {
+            setStatus('Chưa có API key để phát giọng tiếng Hoa.', true);
+            return;
+          }
+          speakWithCloudTts(text, apiKey, lang).catch(function (e) {
+            const msg = e && e.message ? e.message : '';
+            if (msg.toLowerCase().includes('text to speech') || msg.includes('TTS') || msg.includes('403') || msg.includes('API') || msg.includes('not been used') || msg.includes('disabled')) {
+              setStatus('Cloud TTS chưa bật: Vào console.cloud.google.com → APIs → bật "Cloud Text-to-Speech API" cho project của bạn.', true);
+            } else {
+              setStatus('Không phát được âm thanh: ' + msg, true);
+            }
+          });
+          return;
+        }
+
+        // Tiếng Anh: dùng Web SpeechSynthesis
         if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
           setStatus('Thiết bị này không hỗ trợ phát âm thanh.', true);
           return;
         }
 
-        function doSpeak() {
+        function doSpeakEn() {
           try {
             const voices = window.speechSynthesis.getVoices() || [];
             const speech = new SpeechSynthesisUtterance(text);
-
-            if (currentLang === 'zh') {
-              speech.lang = 'zh-CN';
-              const zhVoice = voices.find(function (v) {
-                const l = (v.lang || '').toLowerCase();
-                return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn') || l.includes('mandarin');
-              });
-              if (zhVoice) speech.voice = zhVoice;
-            } else {
-              speech.lang = 'en-US';
-              const enVoice = voices.find(function (v) { return v.lang.toLowerCase() === 'en-us'; }) ||
-                voices.find(function (v) { return v.lang.toLowerCase().startsWith('en'); });
-              if (enVoice) speech.voice = enVoice;
-            }
-
-            var started = false;
-            var silenceTimer = null;
-
-            // Phát hiện nếu Android Chrome im lặng hoàn toàn (không fire onstart)
-            silenceTimer = setTimeout(function () {
-              if (!started) {
-                window.speechSynthesis.cancel();
-                if (currentLang === 'zh') {
-                  setStatus('Điện thoại chưa cài gói giọng Tiếng Hoa. Vào Cài đặt → Khả năng tiếp cận → Chuyển văn bản thành giọng nói → thêm Tiếng Hoa (zh-CN).', true);
-                } else {
-                  setStatus('Không phát được âm thanh. Vui lòng thử lại.', true);
-                }
-              }
-            }, 2500);
-
-            speech.onstart = function () {
-              started = true;
-              if (silenceTimer) clearTimeout(silenceTimer);
-            };
-
-            speech.onend = function () {
-              if (silenceTimer) clearTimeout(silenceTimer);
-            };
+            speech.lang = 'en-US';
+            const enVoice = voices.find(function (v) { return v.lang.toLowerCase() === 'en-us'; }) ||
+              voices.find(function (v) { return v.lang.toLowerCase().startsWith('en'); });
+            if (enVoice) speech.voice = enVoice;
 
             speech.onerror = function (event) {
-              if (silenceTimer) clearTimeout(silenceTimer);
               if (event.error !== 'interrupted' && event.error !== 'canceled') {
-                console.warn('SpeechSynthesis error:', event.error);
-                if (currentLang === 'zh') {
-                  setStatus('Không phát được giọng tiếng Hoa. Thiết bị chưa cài giọng đọc zh-CN.', true);
-                } else {
-                  setStatus('Không phát được âm thanh. Vui lòng thử lại.', true);
-                }
+                setStatus('Không phát được âm thanh. Vui lòng thử lại.', true);
               }
             };
 
-            // Android Chrome fix: resume() trước khi speak() để tránh bị tự pause
             window.speechSynthesis.resume();
             window.speechSynthesis.speak(speech);
           } catch (e) {
-            console.warn('SpeechSynthesis lỗi:', e);
             setStatus('Không phát được âm thanh trên thiết bị này.', true);
           }
         }
 
-        // Trên mobile, voices load bất đồng bộ → phải chờ onvoiceschanged
         const voices = window.speechSynthesis.getVoices() || [];
         if (voices.length > 0) {
-          doSpeak();
+          doSpeakEn();
         } else {
-          // Chờ voices load xong (Android/iOS cần thêm thời gian)
           let fired = false;
           window.speechSynthesis.onvoiceschanged = function () {
             if (fired) return;
             fired = true;
             window.speechSynthesis.onvoiceschanged = null;
-            doSpeak();
+            doSpeakEn();
           };
-          // Fallback timeout 800ms nếu onvoiceschanged không fire
           setTimeout(function () {
             if (!fired) {
               fired = true;
-              if (window.speechSynthesis.onvoiceschanged !== null) {
-                window.speechSynthesis.onvoiceschanged = null;
-              }
-              doSpeak();
+              window.speechSynthesis.onvoiceschanged = null;
+              doSpeakEn();
             }
           }, 800);
         }
