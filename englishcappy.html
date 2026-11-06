@@ -2255,7 +2255,7 @@
               speech.lang = 'zh-CN';
               const zhVoice = voices.find(function (v) {
                 const l = (v.lang || '').toLowerCase();
-                return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn');
+                return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn') || l.includes('mandarin');
               });
               if (zhVoice) speech.voice = zhVoice;
             } else {
@@ -2265,7 +2265,32 @@
               if (enVoice) speech.voice = enVoice;
             }
 
+            var started = false;
+            var silenceTimer = null;
+
+            // Phát hiện nếu Android Chrome im lặng hoàn toàn (không fire onstart)
+            silenceTimer = setTimeout(function () {
+              if (!started) {
+                window.speechSynthesis.cancel();
+                if (currentLang === 'zh') {
+                  setStatus('Điện thoại chưa cài gói giọng Tiếng Hoa. Vào Cài đặt → Khả năng tiếp cận → Chuyển văn bản thành giọng nói → thêm Tiếng Hoa (zh-CN).', true);
+                } else {
+                  setStatus('Không phát được âm thanh. Vui lòng thử lại.', true);
+                }
+              }
+            }, 2500);
+
+            speech.onstart = function () {
+              started = true;
+              if (silenceTimer) clearTimeout(silenceTimer);
+            };
+
+            speech.onend = function () {
+              if (silenceTimer) clearTimeout(silenceTimer);
+            };
+
             speech.onerror = function (event) {
+              if (silenceTimer) clearTimeout(silenceTimer);
               if (event.error !== 'interrupted' && event.error !== 'canceled') {
                 console.warn('SpeechSynthesis error:', event.error);
                 if (currentLang === 'zh') {
@@ -2276,7 +2301,8 @@
               }
             };
 
-            window.speechSynthesis.cancel();
+            // Android Chrome fix: resume() trước khi speak() để tránh bị tự pause
+            window.speechSynthesis.resume();
             window.speechSynthesis.speak(speech);
           } catch (e) {
             console.warn('SpeechSynthesis lỗi:', e);
