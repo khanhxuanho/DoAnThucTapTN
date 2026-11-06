@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
   <title>English Cappy AI — luyện nói và sửa câu</title>
   <style>
     :root {
@@ -2237,111 +2238,160 @@
         }
       }
 
-      // Phát âm thanh bằng Google Cloud TTS API (MP3 base64) — hoạt động trên mọi thiết bị
-      async function speakWithCloudTts(text, apiKey, lang) {
-        const langCode = (lang === 'zh') ? 'zh-CN' : 'en-US';
-        const voiceName = (lang === 'zh') ? 'zh-CN-Standard-A' : 'en-US-Standard-C';
+      // Phát âm thanh trực tuyến miễn phí bằng Google Translate TTS (được mở khóa bởi <meta name="referrer" content="no-referrer">)
+      function playOnlineTts(text, lang, onEnd) {
         try {
-          const res = await fetch(
-            'https://texttospeech.googleapis.com/v1/text:synthesize?key=' + encodeURIComponent(apiKey),
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                input: { text: text },
-                voice: { languageCode: langCode, name: voiceName },
-                audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9 }
-              })
+          const tl = (lang === 'zh') ? 'zh-CN' : 'en';
+          const cleanText = text.replace(/[*#_~`]/g, '').trim();
+          if (!cleanText) return;
+
+          // Cắt văn bản theo từng đoạn tối đa 150 ký tự (giới hạn an toàn của Google Translate)
+          const chunks = [];
+          const regex = /[^,;.!?，。！？\n]+[,;.!?，。！？\n]*/g;
+          let match;
+          let currentChunk = '';
+          while ((match = regex.exec(cleanText)) !== null) {
+            if ((currentChunk + match[0]).length > 150) {
+              if (currentChunk.trim()) chunks.push(currentChunk.trim());
+              currentChunk = match[0];
+            } else {
+              currentChunk += match[0];
             }
-          );
-          if (!res.ok) {
-            const err = await res.json().catch(function () { return {}; });
-            const msg = (err && err.error && err.error.message) || ('HTTP ' + res.status);
-            throw new Error(msg);
           }
-          const data = await res.json();
-          if (!data.audioContent) throw new Error('Không có dữ liệu âm thanh.');
-          const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
-          currentAudio = audio;
-          await audio.play();
+          if (currentChunk.trim()) chunks.push(currentChunk.trim());
+          if (chunks.length === 0) chunks.push(cleanText.slice(0, 150));
+
+          let index = 0;
+          function playNext() {
+            if (index >= chunks.length) {
+              if (typeof onEnd === 'function') onEnd();
+              return;
+            }
+            const chunk = chunks[index++];
+            const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=' + encodeURIComponent(tl) + '&client=tw-ob&q=' + encodeURIComponent(chunk);
+            const audio = new Audio(url);
+            currentAudio = audio;
+            audio.onended = playNext;
+            audio.onerror = function () {
+              console.warn('Không thể tải đoạn audio:', chunk);
+              playNext();
+            };
+            audio.play().catch(function (err) {
+              console.warn('Lỗi audio play:', err);
+              // Nếu bị trình duyệt chặn autoplay, thông báo nhẹ
+              setStatus('Bấm nút 🔊 Nghe lại để phát âm thanh.', false);
+            });
+          }
+          playNext();
         } catch (e) {
-          console.warn('Cloud TTS lỗi:', e);
-          throw e;
+          console.warn('Lỗi playOnlineTts:', e);
         }
       }
 
-      // Phát âm thanh: ưu tiên Web Speech API (desktop), fallback Cloud TTS (mobile)
+      // Phát âm thanh tự động
       function speak(text) {
         if (!text || !text.trim()) return;
         stopCurrentAudio();
 
-        const apiKey = ($key && $key.val()) ? $key.val().trim() : '';
-        const lang = currentLang;
-
-        // Tiếng Hoa: dùng Cloud TTS ngay (đáng tin cậy trên mọi thiết bị)
-        // Tiếng Anh: dùng Web SpeechSynthesis (nhanh, không tốn quota)
-        if (lang === 'zh') {
-          if (!apiKey) {
-            setStatus('Chưa có API key để phát giọng tiếng Hoa.', true);
-            return;
-          }
-          speakWithCloudTts(text, apiKey, lang).catch(function (e) {
-            const msg = e && e.message ? e.message : '';
-            if (msg.toLowerCase().includes('text to speech') || msg.includes('TTS') || msg.includes('403') || msg.includes('API') || msg.includes('not been used') || msg.includes('disabled')) {
-              setStatus('Cloud TTS chưa bật: Vào console.cloud.google.com → APIs → bật "Cloud Text-to-Speech API" cho project của bạn.', true);
-            } else {
-              setStatus('Không phát được âm thanh: ' + msg, true);
-            }
-          });
-          return;
-        }
-
-        // Tiếng Anh: dùng Web SpeechSynthesis
-        if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-          setStatus('Thiết bị này không hỗ trợ phát âm thanh.', true);
-          return;
-        }
-
-        function doSpeakEn() {
-          try {
+        // 1. Nếu là Tiếng Hoa:
+        // Thử xem thiết bị có voice tiếng Hoa cài sẵn không
+        if (currentLang === 'zh') {
+          let hasZhNativeVoice = false;
+          if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
             const voices = window.speechSynthesis.getVoices() || [];
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.lang = 'en-US';
-            const enVoice = voices.find(function (v) { return v.lang.toLowerCase() === 'en-us'; }) ||
-              voices.find(function (v) { return v.lang.toLowerCase().startsWith('en'); });
-            if (enVoice) speech.voice = enVoice;
-
-            speech.onerror = function (event) {
-              if (event.error !== 'interrupted' && event.error !== 'canceled') {
-                setStatus('Không phát được âm thanh. Vui lòng thử lại.', true);
-              }
-            };
-
-            window.speechSynthesis.resume();
-            window.speechSynthesis.speak(speech);
-          } catch (e) {
-            setStatus('Không phát được âm thanh trên thiết bị này.', true);
+            hasZhNativeVoice = voices.some(function (v) {
+              const l = (v.lang || '').toLowerCase();
+              return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn') || l.includes('mandarin');
+            });
           }
+
+          // Nếu có sẵn giọng zh trong máy tính hoặc điện thoại đã cài gói: dùng Web SpeechSynthesis
+          if (hasZhNativeVoice) {
+            try {
+              const speech = new SpeechSynthesisUtterance(text);
+              speech.lang = 'zh-CN';
+              const voices = window.speechSynthesis.getVoices() || [];
+              const zhVoice = voices.find(function (v) {
+                const l = (v.lang || '').toLowerCase();
+                return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn') || l.includes('mandarin');
+              });
+              if (zhVoice) speech.voice = zhVoice;
+
+              let played = false;
+              speech.onstart = function () { played = true; };
+              speech.onerror = function (event) {
+                if (event.error !== 'interrupted' && event.error !== 'canceled') {
+                  // Fallback sang Google Translate TTS online nếu engine lỗi
+                  playOnlineTts(text, 'zh');
+                }
+              };
+              // Nếu sau 1.5 giây engine của máy không phát ra tiếng (bệnh của Android Chrome), chuyển sang Google Translate Online
+              setTimeout(function () {
+                if (!played) {
+                  window.speechSynthesis.cancel();
+                  playOnlineTts(text, 'zh');
+                }
+              }, 1500);
+
+              window.speechSynthesis.resume();
+              window.speechSynthesis.speak(speech);
+              return;
+            } catch (e) {
+              console.warn('SpeechSynthesis zh error, fallback online:', e);
+            }
+          }
+
+          // Nếu máy không có sẵn giọng tiếng Hoa (điện thoại Android chưa tải gói giọng):
+          // Dùng luôn Google Translate TTS online cực kỳ mượt và chuẩn 100%!
+          playOnlineTts(text, 'zh');
+          return;
         }
 
-        const voices = window.speechSynthesis.getVoices() || [];
-        if (voices.length > 0) {
-          doSpeakEn();
-        } else {
-          let fired = false;
-          window.speechSynthesis.onvoiceschanged = function () {
-            if (fired) return;
-            fired = true;
-            window.speechSynthesis.onvoiceschanged = null;
+        // 2. Nếu là Tiếng Anh:
+        if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
+          function doSpeakEn() {
+            try {
+              const voices = window.speechSynthesis.getVoices() || [];
+              const speech = new SpeechSynthesisUtterance(text);
+              speech.lang = 'en-US';
+              const enVoice = voices.find(function (v) { return v.lang.toLowerCase() === 'en-us'; }) ||
+                voices.find(function (v) { return v.lang.toLowerCase().startsWith('en'); });
+              if (enVoice) speech.voice = enVoice;
+
+              speech.onerror = function (event) {
+                if (event.error !== 'interrupted' && event.error !== 'canceled') {
+                  playOnlineTts(text, 'en');
+                }
+              };
+
+              window.speechSynthesis.resume();
+              window.speechSynthesis.speak(speech);
+            } catch (e) {
+              playOnlineTts(text, 'en');
+            }
+          }
+
+          const voices = window.speechSynthesis.getVoices() || [];
+          if (voices.length > 0) {
             doSpeakEn();
-          };
-          setTimeout(function () {
-            if (!fired) {
+          } else {
+            let fired = false;
+            window.speechSynthesis.onvoiceschanged = function () {
+              if (fired) return;
               fired = true;
               window.speechSynthesis.onvoiceschanged = null;
               doSpeakEn();
-            }
-          }, 800);
+            };
+            setTimeout(function () {
+              if (!fired) {
+                fired = true;
+                window.speechSynthesis.onvoiceschanged = null;
+                doSpeakEn();
+              }
+            }, 800);
+          }
+        } else {
+          playOnlineTts(text, 'en');
         }
       }
 
