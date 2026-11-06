@@ -2241,28 +2241,16 @@
         if (!text || !text.trim()) return;
         stopCurrentAudio();
 
-        // Kiểm tra xem trình duyệt / hệ điều hành có sẵn voice nội bộ cho ngôn ngữ này không
-        let hasNativeVoice = false;
-        if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
-          const voices = window.speechSynthesis.getVoices() || [];
-          if (currentLang === 'zh') {
-            hasNativeVoice = voices.some(function (v) {
-              const l = (v.lang || '').toLowerCase();
-              return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn');
-            });
-          } else {
-            hasNativeVoice = voices.some(function (v) {
-              const l = (v.lang || '').toLowerCase();
-              return l.startsWith('en');
-            });
-          }
+        if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+          setStatus('Thiết bị này không hỗ trợ phát âm thanh.', true);
+          return;
         }
 
-        // Nếu máy có sẵn voice tương ứng, dùng Web SpeechSynthesis
-        if (hasNativeVoice) {
+        function doSpeak() {
           try {
-            const speech = new SpeechSynthesisUtterance(text);
             const voices = window.speechSynthesis.getVoices() || [];
+            const speech = new SpeechSynthesisUtterance(text);
+
             if (currentLang === 'zh') {
               speech.lang = 'zh-CN';
               const zhVoice = voices.find(function (v) {
@@ -2272,45 +2260,53 @@
               if (zhVoice) speech.voice = zhVoice;
             } else {
               speech.lang = 'en-US';
-              const englishVoice = voices.find(function (v) { return v.lang.toLowerCase() === 'en-us'; }) ||
+              const enVoice = voices.find(function (v) { return v.lang.toLowerCase() === 'en-us'; }) ||
                 voices.find(function (v) { return v.lang.toLowerCase().startsWith('en'); });
-              if (englishVoice) speech.voice = englishVoice;
+              if (enVoice) speech.voice = enVoice;
             }
 
             speech.onerror = function (event) {
               if (event.error !== 'interrupted' && event.error !== 'canceled') {
-                // Tự động chuyển sang Google TTS Online nếu giọng hệ điều hành gặp lỗi
-                playOnlineTts(text, currentLang);
+                console.warn('SpeechSynthesis error:', event.error);
+                if (currentLang === 'zh') {
+                  setStatus('Không phát được giọng tiếng Hoa. Thiết bị chưa cài giọng đọc zh-CN.', true);
+                } else {
+                  setStatus('Không phát được âm thanh. Vui lòng thử lại.', true);
+                }
               }
             };
+
+            window.speechSynthesis.cancel();
             window.speechSynthesis.speak(speech);
-            return;
           } catch (e) {
-            console.warn('SpeechSynthesis lỗi, chuyển sang Online TTS:', e);
+            console.warn('SpeechSynthesis lỗi:', e);
+            setStatus('Không phát được âm thanh trên thiết bị này.', true);
           }
         }
 
-        // Tự động dùng Google TTS trực tuyến (chuẩn giọng Phổ thông cực kỳ tự nhiên)
-        playOnlineTts(text, currentLang);
-      }
-
-      function playOnlineTts(text, lang) {
-        try {
-          const tl = (lang === 'zh') ? 'zh-CN' : 'en';
-          const cleanText = text.replace(/[*#_~`]/g, '').trim();
-          if (!cleanText) return;
-
-          // Cắt chuỗi nếu vượt quá giới hạn 200 ký tự của Google TTS endpoint
-          const chunk = cleanText.length > 200 ? cleanText.substring(0, 195) + '…' : cleanText;
-          const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=' + encodeURIComponent(tl) + '&client=tw-ob&q=' + encodeURIComponent(chunk);
-
-          currentAudio = new Audio(url);
-          currentAudio.play().catch(function (err) {
-            console.warn('Không thể tự động phát âm thanh:', err);
-            setStatus('Không phát được âm thanh. Hãy kiểm tra kết nối mạng hoặc bấm nút 🔊 Nghe lại.', true);
-          });
-        } catch (err) {
-          setStatus('Không phát được âm thanh. Hãy kiểm tra kết nối mạng.', true);
+        // Trên mobile, voices load bất đồng bộ → phải chờ onvoiceschanged
+        const voices = window.speechSynthesis.getVoices() || [];
+        if (voices.length > 0) {
+          doSpeak();
+        } else {
+          // Chờ voices load xong (Android/iOS cần thêm thời gian)
+          let fired = false;
+          window.speechSynthesis.onvoiceschanged = function () {
+            if (fired) return;
+            fired = true;
+            window.speechSynthesis.onvoiceschanged = null;
+            doSpeak();
+          };
+          // Fallback timeout 800ms nếu onvoiceschanged không fire
+          setTimeout(function () {
+            if (!fired) {
+              fired = true;
+              if (window.speechSynthesis.onvoiceschanged !== null) {
+                window.speechSynthesis.onvoiceschanged = null;
+              }
+              doSpeak();
+            }
+          }, 800);
         }
       }
 
