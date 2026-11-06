@@ -68,12 +68,12 @@
     .brand-icon {
       display: grid;
       place-items: center;
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 28px;
       border-radius: 11px;
       color: white;
       background: var(--blue);
-      font-size: 19px
+      font-size: 16px;
     }
 
     .badge {
@@ -82,7 +82,7 @@
       color: #3461c2;
       border-radius: 99px;
       padding: 5px 10px;
-      font-size: 11px;
+      font-size: 8px;
       letter-spacing: .06em;
       font-weight: 800
     }
@@ -104,11 +104,11 @@
       font-size: clamp(27px, 4vw, 38px);
       letter-spacing: -.045em;
       line-height: 1.14;
-      margin: 0 0 10px
+      margin: 0 0 5px
     }
 
     .sub {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       margin: 0;
       max-width: 640px
@@ -213,13 +213,13 @@
 
     .profile strong {
       display: block;
-      font-size: 14px
+      font-size: 12px
     }
 
     .profile small {
       display: block;
       color: var(--green);
-      font-size: 11px
+      font-size: 10px
     }
 
     .tag {
@@ -589,15 +589,15 @@
     .btn-action-primary {
       font-size: 11px;
       font-weight: 700;
-      padding: 6px 11px;
+      padding: 5px 5px;
       border-radius: 8px;
       cursor: pointer;
       font-family: inherit;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 1px;
       transition: all 0.15s ease;
-      line-height: 1.2
+      line-height: 1.2;
     }
 
     .btn-action-outline {
@@ -903,7 +903,7 @@
       }
 
       .chat-head {
-        padding: 15px
+        padding: 5px
       }
 
       .messages {
@@ -943,7 +943,7 @@
       color: #475569;
       font-size: 13px;
       font-weight: 650;
-      padding: 6px 14px;
+      padding: 2px 15px;
       border-radius: 99px;
       transition: all 0.15s ease;
       cursor: pointer;
@@ -1225,7 +1225,7 @@
       <aside class="guide card">
         <h2>Bắt đầu thật đơn giản</h2>
         <div class="step"><span class="num">1</span>
-          <div><strong>Gemini API key</strong>Tự động tải theo từng ngôn ngữ từ Firebase
+          <div><strong>Cappy API key</strong>Tự động tải theo từng ngôn ngữ từ Firebase
             (<code>api_keys/gemini_english</code> hoặc <code>api_keys/gemini_chinese</code>).</div>
         </div>
         <div class="step"><span class="num">2</span>
@@ -1244,7 +1244,8 @@
       <section class="chat card" aria-label="Hội thoại tiếng Anh">
         <div class="chat-head">
           <div class="profile"><span class="avatar" aria-hidden="true">✦</span>
-            <div><strong id="cappy-name">Language Cappy</strong><small id="cappy-sub">● &nbsp;Hội thoại &amp; góp ý cùng Gemini</small></div>
+            <div><strong id="cappy-name">Language Cappy</strong><small id="cappy-sub">● &nbsp;Hội thoại &amp; góp ý cùng
+                Cappy</small></div>
           </div>
           <div class="chat-actions">
             <button id="open-history-en-btn" class="btn-action-outline" type="button"
@@ -1259,8 +1260,8 @@
         </div>
         <div class="lang-bar">
           <span class="lang-label">NGÔN NGỮ</span>
-          <button type="button" class="lang-pill active" id="btn-lang-en" data-lang="en">English · Tiếng Anh</button>
-          <button type="button" class="lang-pill" id="btn-lang-zh" data-lang="zh">中文 · Tiếng Hoa</button>
+          <button type="button" class="lang-pill active" id="btn-lang-en" data-lang="en">English</button>
+          <button type="button" class="lang-pill" id="btn-lang-zh" data-lang="zh">中文(Tiếng Hoa)</button>
         </div>
         <div class="key-config">
           <div class="key-head">
@@ -1748,7 +1749,7 @@
 
         if (lang === 'zh') {
           $('#cappy-name').text('Language Cappy (中文)');
-          $('#cappy-sub').html('● &nbsp;Hội thoại &amp; góp ý cùng Gemini');
+          $('#cappy-sub').html('● &nbsp;Hội thoại &amp; góp ý cùng Cappy');
           $('#message').attr('placeholder', 'Nhấn vào đây để gõ tiếng Hoa...');
           $('#keyboard-mode-bar').show();
           if (keyboardMode === 'pinyin') {
@@ -1758,7 +1759,7 @@
           setStatus('Đã chọn tiếng Hoa. Nhấn Nói hoặc nhập câu của bạn.');
         } else {
           $('#cappy-name').text('Language Cappy (English)');
-          $('#cappy-sub').html('● &nbsp;Hội thoại &amp; góp ý cùng Gemini');
+          $('#cappy-sub').html('● &nbsp;Hội thoại &amp; góp ý cùng Cappy');
           $('#message').attr('placeholder', 'Ví dụ: How are you?');
           $('#keyboard-mode-bar').hide();
           $('#kb-device-note').hide();
@@ -1781,7 +1782,7 @@
 
         if (!apiKey) {
           $badge.removeClass('checking success').addClass('error').text('Chưa có API key');
-          setStatus('Chưa có Gemini API key cho ' + langName + '. Hãy bấm "Tải lại từ Firebase".', true);
+          setStatus('Chưa có Cappy API key cho ' + langName + '. Hãy bấm "Tải lại từ Firebase".', true);
           return false;
         }
 
@@ -1789,18 +1790,18 @@
           const testUrl = 'https://generativelanguage.googleapis.com/v1beta/models/' + MODEL + '?key=' + encodeURIComponent(apiKey);
           const res = await fetch(testUrl);
           if (res.ok) {
-            $badge.removeClass('checking error').addClass('success').text('✓ Đã kết nối Gemini (' + langName + ')');
-            setStatus('✓ Đã kết nối API Gemini ' + langName + ' thành công! Sẵn sàng trò chuyện.');
+            $badge.removeClass('checking error').addClass('success').text('✓ Đã kết nối Cappy (' + langName + ')');
+            setStatus('✓ Đã kết nối API Cappy ' + langName + ' thành công! Sẵn sàng trò chuyện.');
             return true;
           } else {
             const errText = explainApiError(res.status);
             $badge.removeClass('checking success').addClass('error').text('✗ Lỗi key ' + langName + ' (' + res.status + ')');
-            setStatus('✗ Kết nối đến Gemini API thất bại: ' + errText, true);
+            setStatus('✗ Kết nối đến Cappy API thất bại: ' + errText, true);
             return false;
           }
         } catch (err) {
           $badge.removeClass('checking success').addClass('error').text('✗ Không kết nối được');
-          setStatus('✗ Không thể kết nối tới Google Gemini. Hãy kiểm tra mạng Internet.', true);
+          setStatus('✗ Không thể kết nối tới Google Cappy. Hãy kiểm tra mạng Internet.', true);
           return false;
         }
       }
@@ -1912,7 +1913,7 @@
         currentSessionTitle = sess.title || '';
         currentSessionMessages = sess.messages || [];
 
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopCurrentAudio();
         $messages.empty();
 
         history = [];
@@ -1939,7 +1940,7 @@
         currentSessionMessages = [];
         history = [];
 
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopCurrentAudio();
         $messages.empty();
         if (currentLang === 'zh') {
           addMessage('bot', '你好！你今天想聊什么？', true, 'Chào bạn! Hôm nay bạn muốn trò chuyện về chủ đề gì nào?');
@@ -2221,36 +2222,95 @@
         };
       }
 
-      function speak(text) {
-        if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-          setStatus('Trình duyệt này không hỗ trợ đọc thành tiếng. Bạn vẫn có thể đọc câu trả lời.', true);
-          return;
+      let currentAudio = null;
+
+      function stopCurrentAudio() {
+        if (currentAudio) {
+          try {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+          } catch (e) { }
+          currentAudio = null;
         }
-        try {
-          window.speechSynthesis.cancel();
-          const speech = new SpeechSynthesisUtterance(text);
-          const voices = window.speechSynthesis.getVoices();
+        if ('speechSynthesis' in window) {
+          try { window.speechSynthesis.cancel(); } catch (e) { }
+        }
+      }
+
+      function speak(text) {
+        if (!text || !text.trim()) return;
+        stopCurrentAudio();
+
+        // Kiểm tra xem trình duyệt / hệ điều hành có sẵn voice nội bộ cho ngôn ngữ này không
+        let hasNativeVoice = false;
+        if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
+          const voices = window.speechSynthesis.getVoices() || [];
           if (currentLang === 'zh') {
-            speech.lang = 'zh-CN';
-            const zhVoice = voices.find(function (v) {
+            hasNativeVoice = voices.some(function (v) {
               const l = (v.lang || '').toLowerCase();
               return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn');
             });
-            if (zhVoice) speech.voice = zhVoice;
           } else {
-            speech.lang = 'en-US';
-            const englishVoice = voices.find(function (voice) { return voice.lang.toLowerCase() === 'en-us'; }) ||
-              voices.find(function (voice) { return voice.lang.toLowerCase().startsWith('en'); });
-            if (englishVoice) speech.voice = englishVoice;
+            hasNativeVoice = voices.some(function (v) {
+              const l = (v.lang || '').toLowerCase();
+              return l.startsWith('en');
+            });
           }
-          speech.onerror = function (event) {
-            if (event.error !== 'interrupted' && event.error !== 'canceled') {
-              setStatus('Không phát được âm thanh. Hãy kiểm tra loa hoặc nhấn Nghe lại.', true);
+        }
+
+        // Nếu máy có sẵn voice tương ứng, dùng Web SpeechSynthesis
+        if (hasNativeVoice) {
+          try {
+            const speech = new SpeechSynthesisUtterance(text);
+            const voices = window.speechSynthesis.getVoices() || [];
+            if (currentLang === 'zh') {
+              speech.lang = 'zh-CN';
+              const zhVoice = voices.find(function (v) {
+                const l = (v.lang || '').toLowerCase();
+                return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn');
+              });
+              if (zhVoice) speech.voice = zhVoice;
+            } else {
+              speech.lang = 'en-US';
+              const englishVoice = voices.find(function (v) { return v.lang.toLowerCase() === 'en-us'; }) ||
+                voices.find(function (v) { return v.lang.toLowerCase().startsWith('en'); });
+              if (englishVoice) speech.voice = englishVoice;
             }
-          };
-          window.speechSynthesis.speak(speech);
-        } catch (error) {
-          setStatus('Không phát được âm thanh. Hãy kiểm tra loa hoặc nhấn Nghe lại.', true);
+
+            speech.onerror = function (event) {
+              if (event.error !== 'interrupted' && event.error !== 'canceled') {
+                // Tự động chuyển sang Google TTS Online nếu giọng hệ điều hành gặp lỗi
+                playOnlineTts(text, currentLang);
+              }
+            };
+            window.speechSynthesis.speak(speech);
+            return;
+          } catch (e) {
+            console.warn('SpeechSynthesis lỗi, chuyển sang Online TTS:', e);
+          }
+        }
+
+        // Tự động dùng Google TTS trực tuyến (chuẩn giọng Phổ thông cực kỳ tự nhiên)
+        playOnlineTts(text, currentLang);
+      }
+
+      function playOnlineTts(text, lang) {
+        try {
+          const tl = (lang === 'zh') ? 'zh-CN' : 'en';
+          const cleanText = text.replace(/[*#_~`]/g, '').trim();
+          if (!cleanText) return;
+
+          // Cắt chuỗi nếu vượt quá giới hạn 200 ký tự của Google TTS endpoint
+          const chunk = cleanText.length > 200 ? cleanText.substring(0, 195) + '…' : cleanText;
+          const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=' + encodeURIComponent(tl) + '&client=tw-ob&q=' + encodeURIComponent(chunk);
+
+          currentAudio = new Audio(url);
+          currentAudio.play().catch(function (err) {
+            console.warn('Không thể tự động phát âm thanh:', err);
+            setStatus('Không phát được âm thanh. Hãy kiểm tra kết nối mạng hoặc bấm nút 🔊 Nghe lại.', true);
+          });
+        } catch (err) {
+          setStatus('Không phát được âm thanh. Hãy kiểm tra kết nối mạng.', true);
         }
       }
 
@@ -2260,7 +2320,7 @@
         if (status === 404) return 'Model Cappy không khả dụng với project của bạn. Hãy kiểm tra model trong Google AI Studio.';
         if (status === 429) return 'Đã chạm giới hạn sử dụng. Hãy chờ rồi thử lại hoặc xem hạn mức Free Tier trong AI Studio.';
         if (status >= 500) return 'Dịch vụ Cappy đang gặp lỗi. Bạn hãy thử lại sau.';
-        return 'Gemini trả về lỗi ' + status + '. Hãy kiểm tra API key và thử lại.';
+        return 'Cappy trả về lỗi ' + status + '. Hãy kiểm tra API key và thử lại.';
       }
 
       async function sendMessage() {
@@ -2346,9 +2406,9 @@
           if (!rawText) {
             if ((result.promptFeedback && result.promptFeedback.blockReason) ||
               (candidate && candidate.finishReason === 'SAFETY')) {
-              throw new Error('Gemini không thể trả lời câu này. Hãy thử một câu khác.');
+              throw new Error('Cappy không thể trả lời câu này. Hãy thử một câu khác.');
             }
-            throw new Error('Gemini chưa trả về câu trả lời. Hãy thử một câu ngắn hơn.');
+            throw new Error('Cappy chưa trả về câu trả lời. Hãy thử một câu ngắn hơn.');
           }
           const feedback = parseCoachResult(rawText);
           history = nextHistory.concat([{ role: 'model', parts: parts }]).slice(-12);
@@ -2374,7 +2434,7 @@
           $userRow.remove();
           $message.val(text);
           if (error.name === 'AbortError') {
-            setStatus('Gemini phản hồi quá lâu. Hãy thử gửi lại.', true);
+            setStatus('Cappy phản hồi quá lâu. Hãy thử gửi lại.', true);
           } else if (error.name === 'TypeError') {
             setStatus('Không kết nối được Cappy. Hãy kiểm tra Internet và mở trang bằng localhost hoặc HTTPS.', true);
           } else {
@@ -2453,7 +2513,7 @@
         gotResult = false;
         recognitionError = '';
         try {
-          if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+          stopCurrentAudio();
           listening = true;
           updateControls();
           recognition.start();
