@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>English CAPPY AI — luyện nói và sửa câu</title>
+  <title>English Cappy AI — luyện nói và sửa câu</title>
   <style>
     :root {
       color-scheme: light;
@@ -88,7 +88,7 @@
     }
 
     .intro {
-      margin-bottom: 25px
+      margin-bottom: 5px
     }
 
     .eyebrow {
@@ -97,7 +97,7 @@
       font-weight: 800;
       letter-spacing: .13em;
       text-transform: uppercase;
-      margin: 0 0 9px
+      margin: 0px
     }
 
     h1 {
@@ -108,7 +108,7 @@
     }
 
     .sub {
-      font-size: 15px;
+      font-size: 12px;
       color: var(--muted);
       margin: 0;
       max-width: 640px
@@ -186,7 +186,7 @@
     }
 
     .chat-head {
-      padding: 17px 20px;
+      padding: 10px 10px;
       border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
@@ -477,7 +477,7 @@
     }
 
     .key-config {
-      padding: 14px 20px 15px;
+      padding: 10px 20px 12px;
       background: #f8faff;
       border-bottom: 1px solid var(--line)
     }
@@ -665,8 +665,15 @@
     }
 
     @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.96) translateY(8px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .modal-head {
@@ -724,6 +731,43 @@
     .btn-modal-close:hover {
       background: #f1f5f9;
       color: #0f172a
+    }
+
+    .history-tabs-bar {
+      display: flex;
+      gap: 6px;
+      padding: 8px 16px 0;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .history-tab-btn {
+      padding: 7px 13px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .history-tab-btn:hover {
+      color: #1e40af;
+      background: rgba(238, 242, 255, 0.6);
+      border-radius: 6px 6px 0 0;
+    }
+
+    .history-tab-btn.active {
+      color: #2563eb;
+      border-bottom: 2px solid #2563eb;
+      background: #fff;
+      border-radius: 6px 6px 0 0;
     }
 
     .modal-body {
@@ -821,7 +865,7 @@
       }
 
       .top {
-        margin-bottom: 28px
+        margin-bottom: 3px
       }
 
       .layout {
@@ -874,32 +918,323 @@
         display: none
       }
     }
+
+    /* Language Selector Bar */
+    .lang-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px;
+      border-bottom: 1px solid var(--line);
+      background: #fafcff;
+    }
+
+    .lang-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .lang-pill {
+      border: 1px solid #d5e0ee;
+      background: #fff;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 650;
+      padding: 6px 14px;
+      border-radius: 99px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .lang-pill:hover {
+      background: #f0f5ff;
+      border-color: #9cb8f8;
+    }
+
+    .lang-pill.active {
+      background: #edf4ff;
+      border-color: #3569e8;
+      color: #1e4ec8;
+      box-shadow: 0 2px 8px rgba(53, 105, 232, 0.12);
+      font-weight: 750;
+    }
+
+    /* Pinyin Keyboard Switcher */
+    .keyboard-mode-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .kb-mode-btn {
+      border: 1px solid #d5e0ee;
+      background: #fff;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 650;
+      padding: 6px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .kb-mode-btn:hover {
+      background: #f8fafc;
+    }
+
+    .kb-mode-btn.active {
+      background: #edf4ff;
+      border-color: #3569e8;
+      color: #1e4ec8;
+      font-weight: 700;
+    }
+
+    .kb-device-note {
+      font-size: 13px;
+      color: #64748b;
+      margin: 9px 0 0;
+      line-height: 1.45;
+    }
+
+    /* Pinyin Keyboard Panel matching Google Input Tools */
+    .pinyin-panel {
+      margin-top: 14px;
+      border: 1px solid #dbe6fe;
+      border-radius: 18px;
+      background: #fbfdff;
+      padding: 18px 20px 14px;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.05);
+    }
+
+    .pinyin-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pinyin-panel-title {
+      font-size: 15px;
+      font-weight: 750;
+      color: #1e40af;
+    }
+
+    .pinyin-close-btn {
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .pinyin-close-btn:hover {
+      color: #1e293b;
+    }
+
+    .pinyin-panel-sub {
+      font-size: 13px;
+      color: #64748b;
+      margin: 4px 0 14px;
+    }
+
+    .pinyin-display-box {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      height: 42px;
+      padding: 0 14px;
+      gap: 10px;
+      transition: border-color 0.15s ease;
+    }
+
+    .pinyin-display-box:focus-within {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px #dbeafe;
+    }
+
+    .pinyin-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 3px 6px;
+      border-radius: 5px;
+      letter-spacing: 0.06em;
+    }
+
+    .pinyin-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      flex: 1;
+      min-height: 22px;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0.02em;
+    }
+
+    .pinyin-clear-btn {
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .pinyin-clear-btn:hover {
+      color: #ef4444;
+      text-decoration: underline;
+    }
+
+    .pinyin-candidates-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin: 10px 0 14px;
+      padding: 2px 0 6px;
+      min-height: 42px;
+      align-items: center;
+    }
+
+    .pinyin-candidates-bar::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .pinyin-candidates-bar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .cand-item {
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 16px;
+      font-weight: 550;
+      color: #1e293b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      transition: all 0.12s ease;
+      user-select: none;
+    }
+
+    .cand-item:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+    }
+
+    .cand-num {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    /* Virtual Keyboard Rows */
+    .virtual-keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0 auto;
+      max-width: 580px;
+    }
+
+    .vk-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .vk-key {
+      flex: 1;
+      max-width: 48px;
+      height: 44px;
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      transition: all 0.1s ease;
+      user-select: none;
+    }
+
+    .vk-key:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    .vk-key:active {
+      background: #e2e8f0;
+      transform: translateY(1px);
+    }
+
+    .vk-key-backspace {
+      flex: 1.3;
+      max-width: 62px;
+      font-size: 17px;
+    }
+
+    .vk-row-punct .vk-key {
+      max-width: 54px;
+      font-size: 18px;
+      background: #f8fafc;
+    }
+
+    .pinyin-foot-note {
+      font-size: 11px;
+      color: #94a3b8;
+      margin: 14px 0 0;
+      text-align: left;
+    }
   </style>
 </head>
 
 <body>
   <main class="page">
     <header class="top">
-      <div class="brand"><span class="brand-icon" aria-hidden="true">✦</span> English Cappy</div><span class="badge">AI
+      <div class="brand"><span class="brand-icon" aria-hidden="true">✦</span> <span id="app-brand-name">Language
+          Cappy</span></div><span id="brand-badge" class="badge">AI
         HỘI THOẠI &amp; SỬA CÂU</span>
     </header>
     <section class="intro">
-      <p class="eyebrow">Luyện tập mỗi ngày</p>
-      <h1>Cùng nói tiếng Anh nhé.</h1>
-      <p class="sub">Nói hoặc gõ một câu tiếng Anh. Cappy sẽ góp ý cách nói và tiếp tục trò chuyện cùng bạn.</p>
+      <!-- <p class="eyebrow" id="intro-eyebrow">Luyện tập mỗi ngày</p> -->
+      <h1 id="intro-title">Cùng nói chuyện nhé.</h1>
+      <p class="sub" id="intro-sub">Nói hoặc gõ một câu. Cappy sẽ góp ý cách nói trò
+        chuyện cùng bạn.</p>
     </section>
     <div class="layout">
       <aside class="guide card">
         <h2>Bắt đầu thật đơn giản</h2>
         <div class="step"><span class="num">1</span>
-          <div><strong>Gemini API key</strong>Đã gắn sẵn key mặc định để bạn sử dụng ngay. Bạn có thể xóa đi và nhập key
-            mới nếu muốn đổi.</div>
+          <div><strong>Gemini API key</strong>Tự động tải theo từng ngôn ngữ từ Firebase
+            (<code>api_keys/gemini_english</code> hoặc <code>api_keys/gemini_chinese</code>).</div>
         </div>
         <div class="step"><span class="num">2</span>
-          <div><strong>Nhấn Nói</strong>Cho phép dùng micro và nói một câu tiếng Anh.</div>
+          <div><strong>Chọn ngôn ngữ &amp; Nhấn Nói</strong>Chọn Tiếng Anh hoặc Tiếng Hoa, cho phép micro hoặc gõ qua
+            bàn phím Pinyin / bàn phím thiết bị.</div>
         </div>
         <div class="step"><span class="num">3</span>
-          <div><strong>Gửi &amp; học</strong>Xem góp ý bằng tiếng Việt, nghe câu gợi ý và tiếp tục trò chuyện.</div>
+          <div><strong>Gửi &amp; học</strong>Xem góp ý bằng tiếng Việt, nghe câu gợi ý và tiếp tục hội thoại cùng AI.
+          </div>
         </div>
         <div class="tip"><strong>Nhận xét dựa trên chữ</strong>Hãy xem lại câu được nhận dạng trước khi gửi. Demo chưa
           đánh giá được phát âm, và AI có thể góp ý chưa chính xác.</div>
@@ -909,31 +1244,44 @@
       <section class="chat card" aria-label="Hội thoại tiếng Anh">
         <div class="chat-head">
           <div class="profile"><span class="avatar" aria-hidden="true">✦</span>
-            <div><strong>English Cappy</strong><small>● &nbsp;Hội thoại &amp; góp ý cùng Gemini</small></div>
+            <div><strong id="cappy-name">Language Cappy</strong><small id="cappy-sub">● &nbsp;Hội thoại &amp; góp ý cùng Gemini</small></div>
           </div>
           <div class="chat-actions">
-            <button id="open-history-btn" class="btn-action-outline" type="button" title="Xem danh sách lịch sử chủ đề đã nói">📜 Lịch sử <span id="history-badge" class="history-badge">0</span></button>
-            <button id="new-chat-btn" class="btn-action-primary" type="button" title="Bắt đầu cuộc trò chuyện mới">+ Hội thoại mới</button>
+            <button id="open-history-en-btn" class="btn-action-outline" type="button"
+              title="Xem lịch sử trò chuyện Tiếng Anh">📜 LS EN <span id="history-badge-en"
+                class="history-badge">0</span></button>
+            <button id="open-history-zh-btn" class="btn-action-outline" type="button"
+              title="Xem lịch sử trò chuyện Tiếng Hoa">📜 LS 中文 <span id="history-badge-zh"
+                class="history-badge">0</span></button>
+            <button id="new-chat-btn" class="btn-action-primary" type="button" title="Bắt đầu cuộc trò chuyện mới">+ Hội
+              thoại mới</button>
           </div>
         </div>
+        <div class="lang-bar">
+          <span class="lang-label">NGÔN NGỮ</span>
+          <button type="button" class="lang-pill active" id="btn-lang-en" data-lang="en">English · Tiếng Anh</button>
+          <button type="button" class="lang-pill" id="btn-lang-zh" data-lang="zh">中文 · Tiếng Hoa</button>
+        </div>
         <div class="key-config">
-          <div class="key-head"><label for="api-key">Gemini API key</label>
+          <div class="key-head">
+            <!-- <label for="api-key">Gemini API key</label> -->
             <div class="key-actions">
+              <span id="info_connect" class="api-status-badge checking">Kiểm tra kết nối: </span>
               <span id="api-status-badge" class="api-status-badge checking">Đang kiểm tra kết nối…</span>
-              <button type="button" id="toggle-key-visibility" class="key-action-btn" title="Hiện hoặc ẩn API key">Hiện key</button>
-              <button type="button" id="reset-default-key" class="key-action-btn"
-                title="Khôi phục về API key mặc định">Mặc định</button>
-              <a href="https://aistudio.google.com/api-keys" target="_blank" rel="noopener noreferrer">Lấy API key ↗</a>
+              <button type="button" id="toggle-key-visibility" class="key-action-btn" title="Hiện hoặc ẩn API key">Hiện
+                key</button>
+              <button type="button" id="reset-default-key" class="key-action-btn" title="Tải lại key từ Firebase">Tải
+                lại từ Firebase</button>
+              <a href="https://aistudio.google.com/api-keys" target="_blank" rel="noopener noreferrer"
+                style="display: none;">Lấy API key ↗</a>
             </div>
           </div>
           <input class="api-input" id="api-key" type="password"
-            placeholder="Dán API key của bạn vào đây (hoặc dùng mặc định)" autocomplete="new-password"
-            spellcheck="false" aria-describedby="key-note">
-          <p class="key-note" id="key-note">Key mặc định đã được gắn sẵn. Nếu muốn đổi, bạn chỉ cần xóa đi và nhập key
-            mới.</p>
+            placeholder="Dán API key của bạn vào đây (hoặc dùng mặc định từ Firebase)" autocomplete="new-password"
+            spellcheck="false">
         </div>
         <div id="messages" class="messages" role="log" aria-live="polite" aria-label="Nội dung hội thoại">
-          <div class="row bot"><span class="speaker">Cappy</span>
+          <div class="row bot"><span class="speaker"> Cappy</span>
             <div class="bubble">Hi! What would you like to talk about today?</div>
           </div>
         </div>
@@ -942,29 +1290,115 @@
           <div class="input-wrap"><input id="message" type="text" placeholder="Ví dụ: How are you?" autocomplete="off"
               maxlength="500"><button class="record" id="record" type="button">🎙️ &nbsp;Nói</button><button
               class="send" id="send" type="submit">Gửi &nbsp;→</button></div>
+
+          <div class="keyboard-mode-bar" id="keyboard-mode-bar" style="display: none;">
+            <button type="button" class="kb-mode-btn active" id="btn-toggle-pinyin-kb"
+              title="Bật hoặc ẩn bàn phím Pinyin">⌨️ Ẩn Pinyin</button>
+            <button type="button" class="kb-mode-btn" id="btn-device-kb" title="Sử dụng bàn phím thiết bị">Dùng bàn phím
+              thiết bị</button>
+          </div>
+          <p class="kb-device-note" id="kb-device-note" style="display: none;">Hãy chọn bàn phím tiếng Hoa trên thiết bị
+            của bạn. Trang không thể tự chuyển bàn phím hệ thống.</p>
+
+          <!-- Bàn phím Pinyin · 简体中文 matching screenshot -->
+          <div id="pinyin-keyboard-panel" class="pinyin-panel" style="display: none;">
+            <div class="pinyin-panel-header">
+              <span class="pinyin-panel-title">Bàn phím Pinyin · 简体中文</span>
+              <button type="button" id="close-pinyin-panel" class="pinyin-close-btn" title="Đóng bàn phím">Đóng
+                ✕</button>
+            </div>
+            <p class="pinyin-panel-sub">Gõ pinyin không dấu, rồi chọn chữ. Ví dụ: nihao → 你好</p>
+
+            <div class="pinyin-display-box">
+              <span class="pinyin-badge">PINYIN</span>
+              <span id="pinyin-current-text" class="pinyin-text"></span>
+              <button type="button" id="pinyin-clear-btn" class="pinyin-clear-btn" style="display: none;">Xóa</button>
+            </div>
+
+            <div id="pinyin-candidates-bar" class="pinyin-candidates-bar"></div>
+
+            <div class="virtual-keyboard">
+              <div class="vk-row">
+                <button type="button" class="vk-key" data-key="q">q</button>
+                <button type="button" class="vk-key" data-key="w">w</button>
+                <button type="button" class="vk-key" data-key="e">e</button>
+                <button type="button" class="vk-key" data-key="r">r</button>
+                <button type="button" class="vk-key" data-key="t">t</button>
+                <button type="button" class="vk-key" data-key="y">y</button>
+                <button type="button" class="vk-key" data-key="u">u</button>
+                <button type="button" class="vk-key" data-key="i">i</button>
+                <button type="button" class="vk-key" data-key="o">o</button>
+                <button type="button" class="vk-key" data-key="p">p</button>
+              </div>
+              <div class="vk-row">
+                <button type="button" class="vk-key" data-key="a">a</button>
+                <button type="button" class="vk-key" data-key="s">s</button>
+                <button type="button" class="vk-key" data-key="d">d</button>
+                <button type="button" class="vk-key" data-key="f">f</button>
+                <button type="button" class="vk-key" data-key="g">g</button>
+                <button type="button" class="vk-key" data-key="h">h</button>
+                <button type="button" class="vk-key" data-key="j">j</button>
+                <button type="button" class="vk-key" data-key="k">k</button>
+                <button type="button" class="vk-key" data-key="l">l</button>
+              </div>
+              <div class="vk-row">
+                <button type="button" class="vk-key" data-key="z">z</button>
+                <button type="button" class="vk-key" data-key="x">x</button>
+                <button type="button" class="vk-key" data-key="c">c</button>
+                <button type="button" class="vk-key" data-key="v">v</button>
+                <button type="button" class="vk-key" data-key="b">b</button>
+                <button type="button" class="vk-key" data-key="n">n</button>
+                <button type="button" class="vk-key" data-key="m">m</button>
+                <button type="button" class="vk-key vk-key-backspace" id="vk-backspace" title="Xóa">⌫</button>
+              </div>
+              <div class="vk-row vk-row-punct">
+                <button type="button" class="vk-key" data-insert="，">，</button>
+                <button type="button" class="vk-key" data-insert="。">。</button>
+                <button type="button" class="vk-key" data-insert="？">？</button>
+                <button type="button" class="vk-key" data-insert="！">！</button>
+              </div>
+            </div>
+
+            <p class="pinyin-foot-note">Chuỗi pinyin được gửi tới Google Input Tools để lấy gợi ý; không gửi Cappy API
+              key.</p>
+          </div>
+
           <p class="status" id="status" role="status">Nhấn Nói hoặc nhập câu của bạn.</p>
-          <div class="examples"><span>Thử:</span><button type="button" class="sample">How are you?</button><button
-              type="button" class="sample">Hello</button><button type="button" class="sample">Yesterday I go to
-              school</button></div>
+          <div class="examples"><span>Thử:</span>
+            <div id="sample-list" style="display:inline-flex; gap:6px; flex-wrap:wrap;"><button type="button"
+                class="sample">How are you?</button><button type="button" class="sample">Hello</button><button
+                type="button" class="sample">Yesterday I go to
+                school</button></div>
+          </div>
         </form>
       </section>
     </div>
     <!-- Modal Lịch sử cuộc trò chuyện -->
-    <div id="history-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
+    <div id="history-modal" class="modal-backdrop" role="dialog" aria-modal="true"
+      aria-labelledby="history-modal-title">
       <div class="modal-box">
         <div class="modal-head">
           <h3 id="history-modal-title">📜 Lịch sử cuộc trò chuyện</h3>
           <div class="modal-head-btns">
-            <button type="button" id="clear-all-sessions-btn" class="btn-modal-clear" title="Xóa tất cả cuộc trò chuyện trên Firebase">🗑️ Xóa tất cả</button>
+            <button type="button" id="clear-all-sessions-btn" class="btn-modal-clear"
+              title="Xóa danh sách cuộc trò chuyện trên Firebase">🗑️ Xóa danh sách</button>
             <button type="button" id="close-history-modal" class="btn-modal-close" aria-label="Đóng">✕</button>
           </div>
+        </div>
+        <div class="history-tabs-bar">
+          <button type="button" class="history-tab-btn active" data-tab="en">🇬🇧 Tiếng Anh (<span
+              id="history-count-en">0</span>)</button>
+          <button type="button" class="history-tab-btn" data-tab="zh">🇨🇳 Tiếng Hoa (<span
+              id="history-count-zh">0</span>)</button>
+          <button type="button" class="history-tab-btn" data-tab="all">Tất cả (<span
+              id="history-count-all">0</span>)</button>
         </div>
         <div class="modal-body">
           <div id="history-list" class="history-list"></div>
         </div>
       </div>
     </div>
-    <p class="foot">Demo cá nhân · JavaScript + jQuery · Cần Internet để kết nối Gemini</p>
+    <p class="foot">Mr. Cappy made </p>
   </main>
 
   <!-- jQuery 3.7.1 được nhúng để trang không cần tải thư viện từ CDN. -->
@@ -976,11 +1410,19 @@
       // Đổi tên model tại đây nếu Google thay đổi model hoặc hạn mức trong tương lai.
       const MODEL = 'gemini-3.5-flash-lite';
       const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/' + MODEL + ':generateContent';
-      // Vừa sửa câu, vừa giữ cuộc hội thoại tự nhiên. Nhận xét dựa trên văn bản, không chấm phát âm.
-      const SYSTEM_PROMPT = 'You are a kind English conversation partner and language coach for a beginner. ' +
+
+      let currentLang = 'en'; // 'en' | 'zh'
+      let keyboardMode = 'pinyin'; // 'pinyin' | 'device'
+
+      const DEFAULT_API_KEY_EN = atob('QVEuQWI4Uk42Sk9YVjdtTFpKMHVUX3lYMTVQcjRNTDFYVU1QZlFubmI4NkxjeUktYXhpSFE=');
+      const DEFAULT_API_KEY_ZH = atob('QVEuQWI4Uk42TEhOQkNXU0hFVk0yc0N0RnFmV2JnSDIzdlVlWHRNaGdMMERaUTZObjRIa2c=');
+      const FIREBASE_BASE_URL = 'https://englishtalk-17f02-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+      // System Prompts
+      const SYSTEM_PROMPT_EN = 'You are a kind English conversation partner and language coach for a beginner. ' +
         'The user must communicate ONLY in English. ' +
         'If the user message is in Vietnamese (with or without diacritics/accents) or any other non-English language: ' +
-        'set assessment to "not_english", reply to "I don\'t understand, please speak English.", ' +
+        'set assessment to "not_target_lang", reply to "I don\'t understand, please speak English.", ' +
         'replyVi to "Tôi không hiểu, vui lòng nói tiếng Anh.", suggested to "", and explanationVi to "Vui lòng sử dụng tiếng Anh khi trò chuyện.". ' +
         'Otherwise, for English input: assess the English text for meaningful errors or awkward wording. ' +
         'Use assessment "correction" for an actual grammar or word-choice error, "naturalness" for a grammatically acceptable but noticeably awkward phrase, and "correct" when it is already fine. ' +
@@ -992,58 +1434,367 @@
         'Also continue the conversation in reply: one or two short, natural spoken English sentences, with a brief follow-up question when appropriate. ' +
         'Provide replyVi: the accurate and natural Vietnamese translation of the reply. ' +
         'Use plain text without Markdown, emojis, lists or stage directions. Follow the requested JSON schema.';
+
+      const SYSTEM_PROMPT_ZH = 'You are a kind Chinese (Mandarin) conversation partner and language coach for a beginner. ' +
+        'The user must communicate ONLY in Chinese (Chinese characters or Pinyin). ' +
+        'If the user message is in Vietnamese or English or any non-Chinese language: ' +
+        'set assessment to "not_target_lang", reply to "我听不懂，请说中文。", ' +
+        'replyVi to "Tôi không hiểu, vui lòng nói tiếng Hoa.", suggested to "", and explanationVi to "Vui lòng sử dụng tiếng Hoa (chữ Hán hoặc Pinyin) khi trò chuyện.". ' +
+        'Otherwise, for Chinese input: assess the Chinese text for meaningful errors or awkward wording. ' +
+        'Use assessment "correction" for an actual grammar or word-choice error, "naturalness" for a grammatically acceptable but noticeably awkward phrase, and "correct" when it is already fine. ' +
+        'Accept natural conversational fragments, informal wording; do not invent errors. ' +
+        'Ignore punctuation alone because the text may be transcribed from speech. ' +
+        'Never claim to assess spoken pronunciation or accent from a transcript. ' +
+        'If a change is needed, provide the full suggested Chinese sentence in Simplified Chinese (with Pinyin in parentheses), keeping the original meaning, and one short explanation in Vietnamese. ' +
+        'When the sentence is already fine, use empty strings for suggested and explanationVi. ' +
+        'Also continue the conversation in reply: one or two short, natural spoken Chinese sentences, with a brief follow-up question when appropriate. ' +
+        'Provide replyVi: the accurate and natural Vietnamese translation of the reply. ' +
+        'Use plain text without Markdown, emojis, lists or stage directions. Follow the requested JSON schema.';
+
       const COACH_SCHEMA = {
         type: 'object',
         properties: {
-          assessment: { type: 'string', enum: ['correct', 'correction', 'naturalness', 'not_english'], description: 'Whether the wording is fine, has an error, is awkward, or is not in English.' },
-          suggested: { type: 'string', description: 'Complete suggested English sentence, or an empty string if already fine or not English.' },
+          assessment: { type: 'string', enum: ['correct', 'correction', 'naturalness', 'not_english', 'not_target_lang'], description: 'Whether the wording is fine, has an error, is awkward, or is not in target language.' },
+          suggested: { type: 'string', description: 'Complete suggested sentence in target language, or an empty string if already fine or not in target language.' },
           explanationVi: { type: 'string', description: 'One short Vietnamese explanation of the change, or an empty string if already fine.' },
-          reply: { type: 'string', description: 'The natural English conversational reply to the user.' },
+          reply: { type: 'string', description: 'The natural conversational reply to the user in target language.' },
           replyVi: { type: 'string', description: 'The natural and accurate Vietnamese translation of the reply.' }
         },
         required: ['assessment', 'suggested', 'explanationVi', 'reply', 'replyVi']
       };
 
-      const DEFAULT_API_KEY = atob('QVEuQWI4Uk42Sk9YVjdtTFpKMHVUX3lYMTVQcjRNTDFYVU1QZlFubmI4NkxjeUktYXhpSFE=');
-      const FIREBASE_BASE_URL = 'https://englishtalk-17f02-default-rtdb.asia-southeast1.firebasedatabase.app';
+      const PINYIN_DICT = {
+        'ni': ['你', '您', '呢', '泥', '拟'],
+        'hao': ['好', '号', '毫', '浩', '豪'],
+        'nihao': ['你好', '您好'],
+        'wo': ['我', '握', '窝', '卧'],
+        'ta': ['他', '她', '它', '踏'],
+        'men': ['们', '门', '闷'],
+        'women': ['我们'],
+        'nimen': ['你们'],
+        'tamen': ['他们', '她们'],
+        'shi': ['是', '十', '事', '时', '市', '视', '师'],
+        'bu': ['不', '步', '布', '部'],
+        'bushi': ['不是'],
+        'de': ['的', '得', '地'],
+        'le': ['了', '乐'],
+        'ma': ['吗', '妈', '马', '骂'],
+        'ne': ['呢', '呐'],
+        'ba': ['吧', '八', '爸', '把'],
+        'xie': ['写', '些', '谢', '鞋'],
+        'xiexie': ['谢谢'],
+        'zai': ['在', '再', '载'],
+        'jian': ['见', '件', '间', '建'],
+        'zaijian': ['再见'],
+        'qing': ['请', '情', '清', '晴'],
+        'wen': ['问', '文', '闻', '温'],
+        'qingwen': ['请问'],
+        'dui': ['对', '队'],
+        'qi': ['起', '七', '期', '气', '其'],
+        'duibuqi': ['对不起'],
+        'mei': ['没', '美', '每', '妹'],
+        'guan': ['关', '观', '馆'],
+        'xi': ['系', '西', '喜', '洗'],
+        'meiguanxi': ['没关系'],
+        'ke': ['客', '可', '课', '刻'],
+        'bukeqi': ['不客气'],
+        'shen': ['什', '深', '神'],
+        'me': ['么'],
+        'shenme': ['什么'],
+        'zen': ['怎'],
+        'zenme': ['怎么'],
+        'zenmeyang': ['怎么样'],
+        'shui': ['谁', '水', '睡'],
+        'shei': ['谁'],
+        'na': ['那', '哪'],
+        'li': ['里', '力', '立', '离'],
+        'nali': ['哪里', '那里'],
+        'nar': ['哪儿', '那儿'],
+        'duo': ['多', '朵'],
+        'shao': ['少', '绍', '烧'],
+        'duoshao': ['多少'],
+        'ji': ['几', '机', '极', '寄'],
+        'xihuan': ['喜欢'],
+        'xiang': ['想', '向', '像', '相'],
+        'yao': ['要', '药', '咬'],
+        'you': ['有', '又', '友', '右'],
+        'meiyou': ['没有'],
+        'hen': ['很', '恨'],
+        'tai': ['太', '态'],
+        'chi': ['吃', '迟', '池'],
+        'chifan': ['吃饭'],
+        'he': ['喝', '和', '何', '河'],
+        'hecha': ['喝茶'],
+        'qu': ['去', '取', '趣'],
+        'lai': ['来', '赖'],
+        'xue': ['学', '雪'],
+        'xuexi': ['学习'],
+        'xuesheng': ['学生'],
+        'laoshi': ['老师'],
+        'shuo': ['说', '硕'],
+        'shuohua': ['说话'],
+        'kan': ['看', '砍'],
+        'ting': ['听', '停', '厅'],
+        'zhong': ['中', '种', '重'],
+        'zhongwen': ['中文'],
+        'hanyu': ['汉语'],
+        'zhongguo': ['中国'],
+        'jin': ['今', '进', '近', '金'],
+        'tian': ['天', '田', '填'],
+        'jintian': ['今天'],
+        'ming': ['明', '名', '命'],
+        'mingtian': ['明天'],
+        'xian': ['现', '先', '线'],
+        'xianzai': ['现在'],
+        'dian': ['点', '电', '店'],
+        'qian': ['钱', '前', '千'],
+        'kuai': ['块', '快', '筷'],
+        'ge': ['个', '歌', '各'],
+        'jia': ['家', '加', '假'],
+        'ren': ['人', '任', '认'],
+        'pengyou': ['朋友'],
+        'shuijiao': ['睡觉'],
+        'gongzuo': ['工作'],
+        'gaoxing': ['高兴'],
+        'renshi': ['认识'],
+        'shang': ['上', '商', '伤'],
+        'xia': ['下', '夏'],
+        'zuo': ['做', '作', '坐', '左'],
+        'mai': ['买', '卖'],
+        'dongxi': ['东西'],
+        'yi': ['一', '以', '已', '意'],
+        'er': ['二', '儿', '耳'],
+        'san': ['三', '伞'],
+        'si': ['四', '思', '死'],
+        'wu': ['五', '午', '屋'],
+        'liu': ['六', '流', '留'],
+        'qi': ['七', '期', '起'],
+        'ba': ['八', '爸', '把'],
+        'jiu': ['九', '酒', '久']
+      };
+
       const $key = $('#api-key');
-      $key.val(DEFAULT_API_KEY);
+      $key.val(DEFAULT_API_KEY_EN);
       const $message = $('#message');
       const $messages = $('#messages');
       const $record = $('#record');
       const $send = $('#send');
       const $status = $('#status');
-      const $openHistoryBtn = $('#open-history-btn');
+      const $openHistoryEnBtn = $('#open-history-en-btn');
+      const $openHistoryZhBtn = $('#open-history-zh-btn');
       const $newChatBtn = $('#new-chat-btn');
-      const $historyBadge = $('#history-badge');
       const $historyModal = $('#history-modal');
       const $historyList = $('#history-list');
       const $closeHistoryModal = $('#close-history-modal');
       const $clearAllSessionsBtn = $('#clear-all-sessions-btn');
+      let activeHistoryTab = 'en';
+
+      let currentPinyin = '';
+      let currentCandidates = [];
+
+      async function fetchGoogleInputCandidates(pinyinText) {
+        const q = (pinyinText || '').trim().toLowerCase();
+        if (!q) {
+          currentCandidates = [];
+          $('#pinyin-candidates-bar').empty();
+          return;
+        }
+
+        try {
+          const url = 'https://inputtools.google.com/request?text=' + encodeURIComponent(q) + '&itc=zh-t-i0-pinyin&num=11&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage';
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data[0] === 'SUCCESS' && data[1] && data[1][0] && data[1][0][1]) {
+              renderCandidates(data[1][0][1]);
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn('Lỗi gọi Google Input Tools:', err);
+        }
+
+        // Fallback sang từ điển nội bộ nếu mất mạng
+        let matches = [];
+        if (PINYIN_DICT[q]) {
+          matches = PINYIN_DICT[q];
+        } else {
+          const keys = Object.keys(PINYIN_DICT).filter(k => k.startsWith(q));
+          keys.slice(0, 5).forEach(k => {
+            matches = matches.concat(PINYIN_DICT[k]);
+          });
+          matches = Array.from(new Set(matches));
+        }
+        renderCandidates(matches.length > 0 ? matches : [q]);
+      }
+
+      function renderCandidates(candidatesList) {
+        currentCandidates = candidatesList || [];
+        const $bar = $('#pinyin-candidates-bar');
+        $bar.empty();
+
+        if (!currentCandidates.length) return;
+
+        currentCandidates.slice(0, 10).forEach((word, idx) => {
+          const $btn = $('<button>').attr({ type: 'button' }).addClass('cand-item');
+          $('<span>').addClass('cand-num').text(idx + 1).appendTo($btn);
+          $btn.append(document.createTextNode(word));
+
+          $btn.on('click', function () {
+            insertTextIntoMessage(word);
+            clearCurrentPinyin();
+            $message.trigger('focus');
+          });
+
+          $bar.append($btn);
+        });
+      }
+
+      function appendPinyinChar(char) {
+        currentPinyin += char.toLowerCase();
+        $('#pinyin-current-text').text(currentPinyin);
+        $('#pinyin-clear-btn').show();
+        fetchGoogleInputCandidates(currentPinyin);
+      }
+
+      function removeLastPinyinChar() {
+        if (currentPinyin.length > 0) {
+          currentPinyin = currentPinyin.slice(0, -1);
+          $('#pinyin-current-text').text(currentPinyin);
+          if (currentPinyin.length === 0) {
+            clearCurrentPinyin();
+          } else {
+            fetchGoogleInputCandidates(currentPinyin);
+          }
+        } else {
+          const val = $message.val();
+          if (val.length > 0) {
+            $message.val(val.slice(0, -1)).trigger('input');
+          }
+        }
+      }
+
+      function clearCurrentPinyin() {
+        currentPinyin = '';
+        currentCandidates = [];
+        $('#pinyin-current-text').text('');
+        $('#pinyin-clear-btn').hide();
+        $('#pinyin-candidates-bar').empty();
+      }
+
+      function showPinyinKeyboard() {
+        keyboardMode = 'pinyin';
+        $('#btn-toggle-pinyin-kb').addClass('active').text('⌨️ Ẩn Pinyin');
+        $('#btn-device-kb').removeClass('active');
+        $('#kb-device-note').hide();
+        $('#pinyin-keyboard-panel').slideDown(150);
+      }
+
+      function hidePinyinKeyboard() {
+        $('#btn-toggle-pinyin-kb').removeClass('active').text('⌨️ Bàn phím Pinyin');
+        $('#pinyin-keyboard-panel').slideUp(150);
+      }
+
+      function insertTextIntoMessage(textToInsert) {
+        const el = $message[0];
+        const val = el.value;
+        const start = el.selectionStart || val.length;
+        const end = el.selectionEnd || val.length;
+        el.value = val.substring(0, start) + textToInsert + val.substring(end);
+        el.selectionStart = el.selectionEnd = start + textToInsert.length;
+        $message.trigger('input');
+      }
+
+      async function fetchApiKeyForCurrentLang() {
+        const isZh = (currentLang === 'zh');
+        const langName = isZh ? 'Tiếng Hoa' : 'Tiếng Anh';
+        const firebasePath = isZh ? '/api_keys/gemini_chinese.json' : '/api_keys/gemini_english.json';
+        const defaultKey = isZh ? DEFAULT_API_KEY_ZH : DEFAULT_API_KEY_EN;
+
+        const $badge = $('#api-status-badge');
+        $badge.removeClass('success error').addClass('checking').text(`Đang lấy key ${langName} từ Firebase…`);
+        try {
+          const res = await fetch(FIREBASE_BASE_URL + firebasePath + '?t=' + Date.now(), { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            const key = (typeof data === 'string' ? data : (data && (data.key || data.apiKey))) || '';
+            if (key && key.trim()) {
+              const activeKey = key.trim();
+              $key.val(activeKey);
+              await checkGeminiConnection(activeKey);
+              return activeKey;
+            }
+          }
+        } catch (err) {
+          console.warn('Lỗi lấy API key từ Firebase:', err);
+        }
+
+        $key.val(defaultKey);
+        await checkGeminiConnection(defaultKey);
+        return defaultKey;
+      }
+
+      async function switchLanguage(lang) {
+        if (generating || listening) return;
+        const isSameLang = (lang === currentLang);
+        currentLang = lang;
+
+        $('.lang-pill').removeClass('active');
+        $(`.lang-pill[data-lang="${lang}"]`).addClass('active');
+
+        if (recognition) {
+          recognition.lang = (lang === 'zh') ? 'zh-CN' : 'en-US';
+        }
+
+        if (lang === 'zh') {
+          $('#cappy-name').text('Language Cappy (中文)');
+          $('#cappy-sub').html('● &nbsp;Hội thoại &amp; góp ý cùng Gemini');
+          $('#message').attr('placeholder', 'Nhấn vào đây để gõ tiếng Hoa...');
+          $('#keyboard-mode-bar').show();
+          if (keyboardMode === 'pinyin') {
+            showPinyinKeyboard();
+          }
+          $('#sample-list').html('<button type="button" class="sample">你好</button><button type="button" class="sample">你今天怎么样？</button><button type="button" class="sample">我喜欢学习中文。</button>');
+          setStatus('Đã chọn tiếng Hoa. Nhấn Nói hoặc nhập câu của bạn.');
+        } else {
+          $('#cappy-name').text('Language Cappy (English)');
+          $('#cappy-sub').html('● &nbsp;Hội thoại &amp; góp ý cùng Gemini');
+          $('#message').attr('placeholder', 'Ví dụ: How are you?');
+          $('#keyboard-mode-bar').hide();
+          $('#kb-device-note').hide();
+          $('#pinyin-keyboard-panel').hide();
+          $('#sample-list').html('<button type="button" class="sample">How are you?</button><button type="button" class="sample">Hello</button><button type="button" class="sample">Yesterday I go to school</button>');
+          setStatus('Đã chọn tiếng Anh. Nhấn Nói hoặc nhập câu của bạn.');
+        }
+
+        await fetchApiKeyForCurrentLang();
+        if (!isSameLang) {
+          startNewChat();
+        }
+      }
 
       async function checkGeminiConnection(keyToCheck) {
         const apiKey = (keyToCheck || $key.val() || '').trim();
         const $badge = $('#api-status-badge');
+        const langName = (currentLang === 'zh') ? 'Tiếng Hoa' : 'Tiếng Anh';
         $badge.removeClass('success error').addClass('checking').text('Đang kiểm tra kết nối…');
 
         if (!apiKey) {
           $badge.removeClass('checking success').addClass('error').text('Chưa có API key');
-          setStatus('Chưa có Gemini API key. Hãy nhập key hoặc bấm "Mặc định".', true);
+          setStatus('Chưa có Gemini API key cho ' + langName + '. Hãy bấm "Tải lại từ Firebase".', true);
           return false;
         }
 
         try {
           const testUrl = 'https://generativelanguage.googleapis.com/v1beta/models/' + MODEL + '?key=' + encodeURIComponent(apiKey);
-          const res = await fetch(testUrl, {
-            headers: { 'x-goog-api-key': apiKey }
-          });
+          const res = await fetch(testUrl);
           if (res.ok) {
-            $badge.removeClass('checking error').addClass('success').text('✓ Đã kết nối Gemini');
-            setStatus('✓ Kết nối đến API Gemini thành công! Sẵn sàng trò chuyện.');
+            $badge.removeClass('checking error').addClass('success').text('✓ Đã kết nối Gemini (' + langName + ')');
+            setStatus('✓ Đã kết nối API Gemini ' + langName + ' thành công! Sẵn sàng trò chuyện.');
             return true;
           } else {
             const errText = explainApiError(res.status);
-            $badge.removeClass('checking success').addClass('error').text('✗ Lỗi kết nối (' + res.status + ')');
+            $badge.removeClass('checking success').addClass('error').text('✗ Lỗi key ' + langName + ' (' + res.status + ')');
             setStatus('✗ Kết nối đến Gemini API thất bại: ' + errText, true);
             return false;
           }
@@ -1079,9 +1830,22 @@
         return day + '/' + month + '/' + year + ' ' + hours + ':' + minutes;
       }
 
+      function getSessionLang(sess) {
+        if (!sess) return 'en';
+        if (sess.lang === 'zh' || sess.lang === 'en') return sess.lang;
+        const text = (sess.title || '') + ' ' + ((sess.messages && sess.messages[0] && sess.messages[0].text) || '');
+        return /[\u4e00-\u9fa5]/.test(text) ? 'zh' : 'en';
+      }
+
       function updateHistoryBadge() {
-        const count = Object.keys(allSessions).length;
-        $historyBadge.text(count);
+        const sessions = Object.values(allSessions || {});
+        const enCount = sessions.filter(s => getSessionLang(s) === 'en').length;
+        const zhCount = sessions.filter(s => getSessionLang(s) === 'zh').length;
+        $('#history-badge-en').text(enCount);
+        $('#history-badge-zh').text(zhCount);
+        $('#history-count-en').text(enCount);
+        $('#history-count-zh').text(zhCount);
+        $('#history-count-all').text(sessions.length);
       }
 
       async function fetchAllSessions() {
@@ -1103,7 +1867,8 @@
         try {
           const sessionData = {
             id: currentSessionId,
-            title: currentSessionTitle || currentSessionMessages[0].text || 'Cuộc trò chuyện',
+            lang: currentLang,
+            title: currentSessionTitle || currentSessionMessages[0].text || (currentLang === 'zh' ? '中文对话' : 'Cuộc trò chuyện'),
             createdAt: currentSessionMessages[0].timestamp || Date.now(),
             updatedAt: Date.now(),
             dateStr: formatDate(currentSessionMessages[0].timestamp || Date.now()),
@@ -1124,6 +1889,25 @@
 
       function loadSession(sess) {
         if (generating || listening) return;
+        if (sess.lang && sess.lang !== currentLang) {
+          currentLang = sess.lang;
+          $('.lang-pill').removeClass('active');
+          $(`.lang-pill[data-lang="${currentLang}"]`).addClass('active');
+          if (currentLang === 'zh') {
+            $('#cappy-name').text('Language Cappy (中文)');
+            $('#message').attr('placeholder', 'Nhấn vào đây để gõ tiếng Hoa...');
+            $('#keyboard-mode-bar').show();
+            $('#sample-list').html('<button type="button" class="sample">你好</button><button type="button" class="sample">你今天怎么样？</button><button type="button" class="sample">我喜欢学习中文。</button>');
+          } else {
+            $('#cappy-name').text('Language Cappy (English)');
+            $('#message').attr('placeholder', 'Ví dụ: How are you?');
+            $('#keyboard-mode-bar').hide();
+            $('#pinyin-keyboard-panel').hide();
+            $('#sample-list').html('<button type="button" class="sample">How are you?</button><button type="button" class="sample">Hello</button><button type="button" class="sample">Yesterday I go to school</button>');
+          }
+          fetchApiKeyForCurrentLang();
+        }
+
         currentSessionId = sess.id;
         currentSessionTitle = sess.title || '';
         currentSessionMessages = sess.messages || [];
@@ -1157,16 +1941,34 @@
 
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         $messages.empty();
-        addMessage('bot', 'Hi! What would you like to talk about today?', true, 'Chào bạn! Hôm nay bạn muốn trò chuyện về chủ đề gì nào?');
-        setStatus('Đã mở cuộc trò chuyện mới. Hãy nhập chủ đề của bạn.');
+        if (currentLang === 'zh') {
+          addMessage('bot', '你好！你今天想聊什么？', true, 'Chào bạn! Hôm nay bạn muốn trò chuyện về chủ đề gì nào?');
+          setStatus('Đã mở cuộc trò chuyện mới. Hãy nhập chủ đề của bạn bằng tiếng Hoa.');
+        } else {
+          addMessage('bot', 'Hi! What would you like to talk about today?', true, 'Chào bạn! Hôm nay bạn muốn trò chuyện về chủ đề gì nào?');
+          setStatus('Đã mở cuộc trò chuyện mới. Hãy nhập chủ đề của bạn.');
+        }
         $message.trigger('focus');
       }
 
       function renderHistoryModalList() {
         $historyList.empty();
-        const list = Object.values(allSessions);
+        const allList = Object.values(allSessions || {});
+        let list = allList;
+
+        if (activeHistoryTab === 'en') {
+          list = allList.filter(s => getSessionLang(s) === 'en');
+        } else if (activeHistoryTab === 'zh') {
+          list = allList.filter(s => getSessionLang(s) === 'zh');
+        }
+
         if (!list.length) {
-          $historyList.html('<div class="history-empty">Chưa có cuộc trò chuyện nào được lưu.<br>Hãy bắt đầu trò chuyện để tạo chủ đề nhé!</div>');
+          const emptyMsg = (activeHistoryTab === 'zh')
+            ? 'Chưa có cuộc trò chuyện Tiếng Hoa nào được lưu.<br>Hãy bắt đầu trò chuyện bằng tiếng Hoa nhé!'
+            : (activeHistoryTab === 'en'
+              ? 'Chưa có cuộc trò chuyện Tiếng Anh nào được lưu.<br>Hãy bắt đầu trò chuyện bằng tiếng Anh nhé!'
+              : 'Chưa có cuộc trò chuyện nào được lưu.<br>Hãy bắt đầu trò chuyện để tạo chủ đề nhé!');
+          $historyList.html(`<div class="history-empty">${emptyMsg}</div>`);
           return;
         }
 
@@ -1176,9 +1978,11 @@
           const $card = $('<div>').addClass('history-card');
           if (sess.id === currentSessionId) $card.addClass('active');
 
+          const sessLang = getSessionLang(sess);
           const msgCount = (sess.messages && sess.messages.length) || 0;
           const $info = $('<div>').addClass('history-info').appendTo($card);
-          $('<div>').addClass('history-topic').text(sess.title || 'Cuộc trò chuyện').appendTo($info);
+          const langTag = (sessLang === 'zh') ? '🇨🇳 ' : '🇬🇧 ';
+          $('<div>').addClass('history-topic').text(langTag + (sess.title || (sessLang === 'zh' ? '中文对话' : 'Cuộc trò chuyện'))).appendTo($info);
 
           const $meta = $('<div>').addClass('history-meta').appendTo($info);
           $('<span>').text('📅 ' + (sess.dateStr || formatDate(sess.createdAt || Date.now()))).appendTo($meta);
@@ -1196,13 +2000,10 @@
               await fetch(FIREBASE_BASE_URL + '/sessions/' + sess.id + '.json', { method: 'DELETE' });
               delete allSessions[sess.id];
               updateHistoryBadge();
-              $card.remove();
+              renderHistoryModalList();
 
               if (sess.id === currentSessionId) {
                 startNewChat();
-              }
-              if (!Object.keys(allSessions).length) {
-                $historyList.html('<div class="history-empty">Đã xóa hết cuộc trò chuyện.</div>');
               }
               setStatus('Đã xóa cuộc trò chuyện trên Firebase.');
             } catch (err) {
@@ -1219,7 +2020,18 @@
         });
       }
 
-      function openHistoryModal() {
+      function openHistoryModal(tabLang) {
+        activeHistoryTab = tabLang || currentLang || 'en';
+        $('.history-tab-btn').removeClass('active');
+        $(`.history-tab-btn[data-tab="${activeHistoryTab}"]`).addClass('active');
+
+        const titleMap = {
+          'en': '📜 Lịch sử hội thoại Tiếng Anh',
+          'zh': '📜 Lịch sử hội thoại Tiếng Hoa',
+          'all': '📜 Tất cả lịch sử hội thoại'
+        };
+        $('#history-modal-title').text(titleMap[activeHistoryTab] || '📜 Lịch sử cuộc trò chuyện');
+
         $historyModal.addClass('open');
         $historyList.html('<div class="history-loading">Đang tải danh sách từ Firebase…</div>');
         fetchAllSessions().then(() => {
@@ -1233,17 +2045,36 @@
 
       async function clearAllSessionsFromFirebase() {
         if (generating || listening) return;
-        const confirmed = window.confirm('Bạn có chắc chắn muốn xóa TẤT CẢ các cuộc trò chuyện trên Firebase không?');
+        const allList = Object.values(allSessions || {});
+        let targetSessions = allList;
+        let confirmText = 'Bạn có chắc chắn muốn xóa TẤT CẢ các cuộc trò chuyện trên Firebase không?';
+
+        if (activeHistoryTab === 'en') {
+          targetSessions = allList.filter(s => getSessionLang(s) === 'en');
+          confirmText = 'Bạn có chắc chắn muốn xóa tất cả cuộc trò chuyện TIẾNG ANH trên Firebase không?';
+        } else if (activeHistoryTab === 'zh') {
+          targetSessions = allList.filter(s => getSessionLang(s) === 'zh');
+          confirmText = 'Bạn có chắc chắn muốn xóa tất cả cuộc trò chuyện TIẾNG HOA trên Firebase không?';
+        }
+
+        if (!targetSessions.length) {
+          window.alert('Không có cuộc trò chuyện nào để xóa trong mục này.');
+          return;
+        }
+
+        const confirmed = window.confirm(confirmText);
         if (!confirmed) return;
 
         try {
           $historyList.html('<div class="history-loading">Đang xóa trên Firebase…</div>');
-          await fetch(FIREBASE_BASE_URL + '/sessions.json', { method: 'DELETE' });
-          allSessions = {};
+          for (const s of targetSessions) {
+            await fetch(FIREBASE_BASE_URL + '/sessions/' + s.id + '.json', { method: 'DELETE' });
+            delete allSessions[s.id];
+          }
           updateHistoryBadge();
-          startNewChat();
           renderHistoryModalList();
-          setStatus('Đã xóa tất cả cuộc trò chuyện trên Firebase.');
+          startNewChat();
+          setStatus('Đã xóa danh sách cuộc trò chuyện được chọn trên Firebase.');
         } catch (err) {
           setStatus('Lỗi khi xóa: ' + err.message, true);
         }
@@ -1258,7 +2089,8 @@
         $message.prop('disabled', generating);
         $record.prop('disabled', !recognition || listening || generating);
         $newChatBtn.prop('disabled', listening || generating || waitingToSend);
-        $openHistoryBtn.prop('disabled', generating || waitingToSend);
+        $openHistoryEnBtn.prop('disabled', generating || waitingToSend);
+        $openHistoryZhBtn.prop('disabled', generating || waitingToSend);
         $('.sample').prop('disabled', listening || generating);
         $send.text(generating ? 'Đang chờ…' : waitingToSend ? 'Đang xử lý…' : 'Gửi  →');
       }
@@ -1267,13 +2099,16 @@
         const apiKey = $key.val().trim();
         if (!apiKey) throw new Error('Chưa có API key.');
         const endpoint = API_URL + '?key=' + encodeURIComponent(apiKey);
+        const prompt = (currentLang === 'zh')
+          ? 'Translate this Chinese sentence to natural Vietnamese only. Do not add explanations or notes:\n"' + text + '"'
+          : 'Translate this English sentence to natural Vietnamese only. Do not add explanations or notes:\n"' + text + '"';
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{
               role: 'user',
-              parts: [{ text: 'Translate this English sentence to natural Vietnamese only. Do not add explanations or notes:\n"' + text + '"' }]
+              parts: [{ text: prompt }]
             }],
             generationConfig: { maxOutputTokens: 256 }
           })
@@ -1288,7 +2123,7 @@
 
       function addMessage(role, text, canReplay, translationVi) {
         const $row = $('<div>').addClass('row').addClass(role);
-        $('<span>').addClass('speaker').text(role === 'user' ? 'Bạn' : 'Cappy').appendTo($row);
+        $('<span>').addClass('speaker').text(role === 'user' ? 'Bạn' : (currentLang === 'zh' ? ' Cappy' : ' Cappy')).appendTo($row);
         $('<div>').addClass('bubble').text(text).appendTo($row);
         if (role === 'bot' && canReplay) {
           const $actions = $('<div>').addClass('bot-actions').appendTo($row);
@@ -1337,21 +2172,25 @@
 
       // Hiển thị nhận xét riêng, không trộn vào câu AI trả lời.
       function addFeedback(data) {
-        const $panel = $('<div>').addClass('feedback').attr('aria-label', 'Nhận xét câu tiếng Anh');
+        const $panel = $('<div>').addClass('feedback').attr('aria-label', 'Nhận xét câu');
         if (data.assessment === 'correct') {
           $panel.addClass('feedback-ok');
           $('<span>').addClass('feedback-title').text('✓  Câu này có vẻ đúng và tự nhiên!').appendTo($panel);
-        } else if (data.assessment === 'not_english') {
+        } else if (data.assessment === 'not_english' || data.assessment === 'not_target_lang') {
           $panel.addClass('feedback-warn');
-          $('<span>').addClass('feedback-title').text('⚠️ Vui lòng chỉ nói hoặc nhập tiếng Anh').appendTo($panel);
-          $('<div>').addClass('feedback-explanation').text(data.explanationVi || "I don't understand, please speak English.").appendTo($panel);
+          const warnTitle = (currentLang === 'zh') ? '⚠️ Vui lòng chỉ nói hoặc nhập tiếng Hoa' : '⚠️ Vui lòng chỉ nói hoặc nhập tiếng Anh';
+          const defaultExp = (currentLang === 'zh') ? "我听不懂，请说中文。" : "I don't understand, please speak English.";
+          $('<span>').addClass('feedback-title').text(warnTitle).appendTo($panel);
+          $('<div>').addClass('feedback-explanation').text(data.explanationVi || defaultExp).appendTo($panel);
         } else {
-          const title = data.assessment === 'correction' ? '✦  Gợi ý sửa câu' : '✦  Cách nói tự nhiên hơn';
+          const title = data.assessment === 'correction'
+            ? (currentLang === 'zh' ? '✦  Gợi ý sửa câu (中文)' : '✦  Gợi ý sửa câu')
+            : (currentLang === 'zh' ? '✦  Cách nói tự nhiên hơn (中文)' : '✦  Cách nói tự nhiên hơn');
           $('<span>').addClass('feedback-title').text(title).appendTo($panel);
-          $('<div>').addClass('feedback-suggestion').attr('lang', 'en').text(data.suggested).appendTo($panel);
+          $('<div>').addClass('feedback-suggestion').attr('lang', currentLang === 'zh' ? 'zh' : 'en').text(data.suggested).appendTo($panel);
           if (data.explanationVi) $('<div>').addClass('feedback-explanation').text(data.explanationVi).appendTo($panel);
-          $('<button>').attr({ type: 'button', 'aria-label': 'Nghe câu gợi ý bằng tiếng Anh' })
-            .addClass('feedback-listen').text('🔊 Nghe câu gợi ý')
+          $('<button>').attr({ type: 'button', 'aria-label': 'Nghe câu gợi ý' })
+            .addClass('feedback-listen').text(currentLang === 'zh' ? '🔊 Nghe câu gợi ý (中文)' : '🔊 Nghe câu gợi ý')
             .on('click', function () { speak(data.suggested); }).appendTo($panel);
         }
         $messages.append($panel);
@@ -1367,7 +2206,7 @@
         } catch (error) {
           throw new Error('AI trả lời chưa đúng định dạng. Hãy nhấn Gửi để thử lại.');
         }
-        const validAssessment = data && ['correct', 'correction', 'naturalness', 'not_english'].includes(data.assessment);
+        const validAssessment = data && ['correct', 'correction', 'naturalness', 'not_english', 'not_target_lang'].includes(data.assessment);
         if (!validAssessment || typeof data.reply !== 'string' || !data.reply.trim() ||
           typeof data.suggested !== 'string' || typeof data.explanationVi !== 'string' ||
           ((data.assessment === 'correction' || data.assessment === 'naturalness') && !data.suggested.trim())) {
@@ -1390,11 +2229,20 @@
         try {
           window.speechSynthesis.cancel();
           const speech = new SpeechSynthesisUtterance(text);
-          speech.lang = 'en-US';
           const voices = window.speechSynthesis.getVoices();
-          const englishVoice = voices.find(function (voice) { return voice.lang.toLowerCase() === 'en-us'; }) ||
-            voices.find(function (voice) { return voice.lang.toLowerCase().startsWith('en'); });
-          if (englishVoice) speech.voice = englishVoice;
+          if (currentLang === 'zh') {
+            speech.lang = 'zh-CN';
+            const zhVoice = voices.find(function (v) {
+              const l = (v.lang || '').toLowerCase();
+              return l.startsWith('zh') || l.includes('chinese') || l.includes('cmn');
+            });
+            if (zhVoice) speech.voice = zhVoice;
+          } else {
+            speech.lang = 'en-US';
+            const englishVoice = voices.find(function (voice) { return voice.lang.toLowerCase() === 'en-us'; }) ||
+              voices.find(function (voice) { return voice.lang.toLowerCase().startsWith('en'); });
+            if (englishVoice) speech.voice = englishVoice;
+          }
           speech.onerror = function (event) {
             if (event.error !== 'interrupted' && event.error !== 'canceled') {
               setStatus('Không phát được âm thanh. Hãy kiểm tra loa hoặc nhấn Nghe lại.', true);
@@ -1408,10 +2256,10 @@
 
       function explainApiError(status) {
         if (status === 400) return 'Yêu cầu không hợp lệ hoặc API key sai. Hãy kiểm tra API key và thử lại.';
-        if (status === 401 || status === 403) return 'API key không hợp lệ hoặc chưa có quyền dùng Gemini. Hãy kiểm tra key và project trong AI Studio.';
-        if (status === 404) return 'Model Gemini không khả dụng với project của bạn. Hãy kiểm tra model trong Google AI Studio.';
+        if (status === 401 || status === 403) return 'API key không hợp lệ hoặc chưa có quyền dùng Cappy. Hãy kiểm tra key và project trong AI Studio.';
+        if (status === 404) return 'Model Cappy không khả dụng với project của bạn. Hãy kiểm tra model trong Google AI Studio.';
         if (status === 429) return 'Đã chạm giới hạn sử dụng. Hãy chờ rồi thử lại hoặc xem hạn mức Free Tier trong AI Studio.';
-        if (status >= 500) return 'Dịch vụ Gemini đang gặp lỗi. Bạn hãy thử lại sau.';
+        if (status >= 500) return 'Dịch vụ Cappy đang gặp lỗi. Bạn hãy thử lại sau.';
         return 'Gemini trả về lỗi ' + status + '. Hãy kiểm tra API key và thử lại.';
       }
 
@@ -1424,18 +2272,29 @@
           return;
         }
 
-        // Bắt buộc chỉ được nói/nhập tiếng Anh; nếu tiếng Việt hoặc ngôn ngữ khác thì thông báo ngay
-        const NON_ENGLISH_REGEX = /[àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ\u0400-\u04FF\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\u0600-\u06FF]/i;
-        if (NON_ENGLISH_REGEX.test(text)) {
-          setStatus("I don't understand, please speak English.", true);
-          speak("I don't understand, please speak English.");
-          $message.trigger('focus');
-          return;
+        // Kiểm tra ngôn ngữ theo tab đang chọn
+        if (currentLang === 'en') {
+          const NON_ENGLISH_REGEX = /[àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ\u0400-\u04FF\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\u0600-\u06FF]/i;
+          if (NON_ENGLISH_REGEX.test(text)) {
+            setStatus("I don't understand, please speak English.", true);
+            speak("I don't understand, please speak English.");
+            $message.trigger('focus');
+            return;
+          }
+        } else if (currentLang === 'zh') {
+          const VIETNAMESE_REGEX = /[àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ]/i;
+          if (VIETNAMESE_REGEX.test(text)) {
+            setStatus("我听不懂，请说中文 (Vui lòng chỉ nói hoặc gõ tiếng Hoa).", true);
+            speak("我听不懂，请说中文。");
+            $message.trigger('focus');
+            return;
+          }
         }
-        // Lấy API key từ ô nhập (mặc định đã được gắn sẵn, hoặc key người dùng tự đổi)
+
+        // Lấy API key từ ô nhập
         const apiKey = $key.val().trim();
         if (!apiKey) {
-          setStatus('Bạn hãy nhập Gemini API key trước khi gửi (hoặc nhấn nút "Mặc định").', true);
+          setStatus('Bạn hãy nhập Cappy API key trước khi gửi (hoặc nhấn nút "Tải lại từ Firebase").', true);
           $key.trigger('focus');
           return;
         }
@@ -1456,19 +2315,20 @@
         $message.val('');
         generating = true;
         updateControls();
-        setStatus('Đang gửi câu nói tới Gemini…');
+        setStatus('Đang gửi câu nói tới Cappy…');
 
         const controller = new AbortController();
         const timeout = window.setTimeout(function () { controller.abort(); }, 60000);
         try {
           const endpoint = API_URL + '?key=' + encodeURIComponent(apiKey);
+          const activeSystemPrompt = (currentLang === 'zh') ? SYSTEM_PROMPT_ZH : SYSTEM_PROMPT_EN;
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+              systemInstruction: { parts: [{ text: activeSystemPrompt }] },
               contents: nextHistory,
-              // Yêu cầu Gemini trả về JSON có cấu trúc để tách nhận xét, gợi ý và câu trả lời.
+              // Yêu cầu Cappy trả về JSON có cấu trúc để tách nhận xét, gợi ý và câu trả lời.
               generationConfig: {
                 maxOutputTokens: 1024,
                 responseMimeType: 'application/json',
@@ -1491,7 +2351,6 @@
             throw new Error('Gemini chưa trả về câu trả lời. Hãy thử một câu ngắn hơn.');
           }
           const feedback = parseCoachResult(rawText);
-          // Giữ nguyên parts của model, kể cả thoughtSignature nếu Google trả về.
           history = nextHistory.concat([{ role: 'model', parts: parts }]).slice(-12);
           $thinking.remove();
           addFeedback(feedback);
@@ -1504,12 +2363,11 @@
             timestamp: Date.now()
           });
           saveCurrentSessionToFirebase();
-          if (feedback.assessment === 'not_english') {
-            setStatus("I don't understand, please speak English.", true);
+          if (feedback.assessment === 'not_english' || feedback.assessment === 'not_target_lang') {
+            setStatus(currentLang === 'zh' ? "我听不懂，请说中文。" : "I don't understand, please speak English.", true);
           } else {
             setStatus('Đã nhận xét và trả lời. Bạn có thể nghe lại hoặc nhấn "Dịch tiếng Việt".');
           }
-          // Tự đọc câu trả lời; người dùng có thể bấm riêng để nghe câu được sửa.
           speak(feedback.reply);
         } catch (error) {
           $thinking.remove();
@@ -1518,7 +2376,7 @@
           if (error.name === 'AbortError') {
             setStatus('Gemini phản hồi quá lâu. Hãy thử gửi lại.', true);
           } else if (error.name === 'TypeError') {
-            setStatus('Không kết nối được Gemini. Hãy kiểm tra Internet và mở trang bằng localhost hoặc HTTPS.', true);
+            setStatus('Không kết nối được Cappy. Hãy kiểm tra Internet và mở trang bằng localhost hoặc HTTPS.', true);
           } else {
             setStatus(error.message || 'Có lỗi xảy ra. Hãy thử lại.', true);
           }
@@ -1531,23 +2389,32 @@
 
       if (SpeechRecognition) {
         recognition = new SpeechRecognition();
-        recognition.lang = 'en-US';
+        recognition.lang = (currentLang === 'zh') ? 'zh-CN' : 'en-US';
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
         recognition.onstart = function () {
-          setStatus('Đang nghe… Hãy nói một câu bằng tiếng Anh.');
+          setStatus(currentLang === 'zh' ? 'Đang nghe… Hãy nói một câu bằng tiếng Hoa.' : 'Đang nghe… Hãy nói một câu bằng tiếng Anh.');
           $record.text('🎙️  Đang nghe');
         };
         recognition.onresult = function (event) {
           const transcript = event.results[0][0].transcript;
           $message.val(transcript);
           gotResult = true;
-          const NON_ENGLISH_REGEX = /[àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ\u0400-\u04FF\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\u0600-\u06FF]/i;
-          if (NON_ENGLISH_REGEX.test(transcript)) {
-            recognitionError = "I don't understand, please speak English.";
-            setStatus(recognitionError, true);
-            speak("I don't understand, please speak English.");
+          if (currentLang === 'en') {
+            const NON_ENGLISH_REGEX = /[àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ\u0400-\u04FF\u4E00-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\u0600-\u06FF]/i;
+            if (NON_ENGLISH_REGEX.test(transcript)) {
+              recognitionError = "I don't understand, please speak English.";
+              setStatus(recognitionError, true);
+              speak("I don't understand, please speak English.");
+            }
+          } else if (currentLang === 'zh') {
+            const VIETNAMESE_REGEX = /[àáảãạăắằẳẵặâấầẩẫậđèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ]/i;
+            if (VIETNAMESE_REGEX.test(transcript)) {
+              recognitionError = "我听不懂，请说中文。";
+              setStatus("我听不懂，请说中文 (Vui lòng chỉ nói tiếng Hoa).", true);
+              speak("我听不懂，请说中文。");
+            }
           }
         };
         recognition.onerror = function (event) {
@@ -1602,7 +2469,6 @@
         event.preventDefault();
         if (generating || waitingToSend) return;
         if (listening && recognition) {
-          // Nếu nhấn Gửi khi micro đang nghe, đợi nhận dạng xong rồi mới gửi cho AI.
           waitingToSend = true;
           updateControls();
           setStatus('Đang hoàn tất nhận dạng giọng nói…');
@@ -1617,15 +2483,145 @@
         sendMessage();
       });
 
-      $('.sample').on('click', function () {
+      // Sự kiện chọn tab ngôn ngữ
+      $('.lang-pill').on('click', function () {
+        const lang = $(this).data('lang');
+        switchLanguage(lang);
+      });
+
+      // Sự kiện chuyển đổi chế độ bàn phím
+      $('#btn-toggle-pinyin-kb').on('click', function () {
+        if ($('#pinyin-keyboard-panel').is(':visible')) {
+          hidePinyinKeyboard();
+        } else {
+          showPinyinKeyboard();
+        }
+      });
+
+      $('#btn-device-kb').on('click', function () {
+        keyboardMode = 'device';
+        $('#btn-device-kb').addClass('active');
+        $('#btn-toggle-pinyin-kb').removeClass('active').text('⌨️ Bàn phím Pinyin');
+        $('#pinyin-keyboard-panel').slideUp(150);
+        $('#kb-device-note').slideDown(150);
+        $message.trigger('focus');
+      });
+
+      $('#close-pinyin-panel').on('click', function () {
+        hidePinyinKeyboard();
+      });
+
+      $('#pinyin-clear-btn').on('click', function () {
+        clearCurrentPinyin();
+      });
+
+      // Nhấn phím ký tự Pinyin trên bàn phím ảo (q-p, a-l, z-m)
+      $(document).on('click', '.vk-key[data-key]', function () {
+        const key = $(this).data('key');
+        appendPinyinChar(key);
+      });
+
+      // Nhấn phím Backspace trên bàn phím ảo
+      $('#vk-backspace').on('click', function () {
+        removeLastPinyinChar();
+      });
+
+      // Nhấn phím dấu câu ảo
+      $(document).on('click', '.vk-key[data-insert]', function () {
+        const char = $(this).data('insert');
+        insertTextIntoMessage(char);
+      });
+
+      // Khi nhấn vào ô chat trong chế độ tiếng Hoa
+      $message.on('focus click', function () {
+        if (currentLang === 'zh' && keyboardMode === 'pinyin' && !$('#pinyin-keyboard-panel').is(':visible')) {
+          showPinyinKeyboard();
+        }
+      });
+
+      // Bắt phím bàn phím vật lý khi đang mở bàn phím Pinyin ảo
+      $(document).on('keydown', function (e) {
+        if (currentLang !== 'zh' || keyboardMode !== 'pinyin' || !$('#pinyin-keyboard-panel').is(':visible')) return;
+        // Bỏ qua nếu đang gõ vào ô cấu hình API key
+        if ($(e.target).is('#api-key')) return;
+
+        // Gõ phím a-z
+        if (e.key && e.key.length === 1 && /[a-zA-Z]/.test(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+          e.preventDefault();
+          appendPinyinChar(e.key);
+          return;
+        }
+
+        // Nhấn số 1-9 để chọn từ gợi ý
+        if (e.key >= '1' && e.key <= '9' && currentCandidates.length > 0) {
+          const idx = parseInt(e.key, 10) - 1;
+          if (currentCandidates[idx]) {
+            e.preventDefault();
+            insertTextIntoMessage(currentCandidates[idx]);
+            clearCurrentPinyin();
+            return;
+          }
+        }
+
+        // Nhấn phím cách (Space) để chọn từ gợi ý đầu tiên
+        if (e.key === ' ' || e.code === 'Space') {
+          if (currentCandidates.length > 0) {
+            e.preventDefault();
+            insertTextIntoMessage(currentCandidates[0]);
+            clearCurrentPinyin();
+            return;
+          }
+        }
+
+        // Nhấn Backspace để xóa ký tự pinyin đang gõ
+        if (e.key === 'Backspace' && currentPinyin.length > 0) {
+          e.preventDefault();
+          removeLastPinyinChar();
+          return;
+        }
+
+        // Nhấn Escape để đóng bàn phím Pinyin
+        if (e.key === 'Escape') {
+          hidePinyinKeyboard();
+          return;
+        }
+      });
+
+      // Click câu mẫu (dùng event delegation)
+      $(document).on('click', '.sample', function () {
         $message.val($(this).text()).trigger('focus');
         setStatus('Đã chọn câu mẫu. Nhấn Gửi để trò chuyện.');
       });
 
       $newChatBtn.on('click', startNewChat);
-      $openHistoryBtn.on('click', openHistoryModal);
+
+      $openHistoryEnBtn.on('click', function () {
+        openHistoryModal('en');
+      });
+
+      $openHistoryZhBtn.on('click', function () {
+        openHistoryModal('zh');
+      });
+
       $closeHistoryModal.on('click', closeHistoryModal);
       $clearAllSessionsBtn.on('click', clearAllSessionsFromFirebase);
+
+      // Chuyển tab lọc trong modal lịch sử
+      $('.history-tab-btn').on('click', function () {
+        const tab = $(this).data('tab');
+        activeHistoryTab = tab;
+        $('.history-tab-btn').removeClass('active');
+        $(this).addClass('active');
+
+        const titleMap = {
+          'en': '📜 Lịch sử hội thoại Tiếng Anh',
+          'zh': '📜 Lịch sử hội thoại Tiếng Hoa',
+          'all': '📜 Tất cả lịch sử hội thoại'
+        };
+        $('#history-modal-title').text(titleMap[activeHistoryTab] || '📜 Lịch sử cuộc trò chuyện');
+
+        renderHistoryModalList();
+      });
 
       // Đóng modal khi bấm vào vùng nền bên ngoài hộp thoại
       $historyModal.on('click', function (e) {
@@ -1634,34 +2630,36 @@
         }
       });
 
-      // Tải danh sách cuộc trò chuyện từ Firebase khi mới mở web
-      fetchAllSessions().then(sessions => {
-        const list = Object.values(sessions || {});
-        if (list.length > 0) {
-          list.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
-          loadSession(list[0]);
-        } else {
-          startNewChat();
-        }
-      });
-
-      // Luôn kiểm tra kết nối API Gemini khi load trang
-      checkGeminiConnection(DEFAULT_API_KEY);
-
-      $key.on('change', function () {
+      // Bắt sự kiện thay đổi API key
+      $key.on('change input', function () {
         checkGeminiConnection($key.val());
       });
 
-      $('#toggle-key-visibility').on('click', function () {
-        const isPassword = $key.attr('type') === 'password';
-        $key.attr('type', isPassword ? 'text' : 'password');
+      // Hiện / ẩn API key (dùng native property để hỗ trợ tốt nhất trên mọi trình duyệt)
+      $(document).on('click', '#toggle-key-visibility', function (e) {
+        e.preventDefault();
+        const inputEl = document.getElementById('api-key');
+        if (!inputEl) return;
+        const isPassword = inputEl.type === 'password';
+        inputEl.type = isPassword ? 'text' : 'password';
         $(this).text(isPassword ? 'Ẩn key' : 'Hiện key');
       });
 
-      $('#reset-default-key').on('click', function () {
-        $key.val(DEFAULT_API_KEY);
-        checkGeminiConnection(DEFAULT_API_KEY);
+      // Nút tải lại key từ Firebase
+      $(document).on('click', '#reset-default-key', async function (e) {
+        e.preventDefault();
+        setStatus('Đang tải lại API key từ Firebase…');
+        await fetchApiKeyForCurrentLang();
       });
+
+      // Khi mở web hoặc tải lại trang: LUÔN HIỆN CUỘC HỘI THOẠI MỚI
+      startNewChat();
+
+      // Tải danh sách cuộc trò chuyện từ Firebase để cập nhật số lượng lịch sử vào các badge
+      fetchAllSessions();
+
+      // Tự động tải API key tương ứng từ Firebase và kiểm tra kết nối khi load trang
+      fetchApiKeyForCurrentLang();
     });
 
   </script>
